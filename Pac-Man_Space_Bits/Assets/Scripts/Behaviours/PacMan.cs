@@ -6,7 +6,7 @@ using UnityEngine;
 public class PacMan : MonoBehaviour
 {
     [SerializeField] LayerMask _whatIsPellet;
-    [SerializeField] Node StartNode;
+    [SerializeField] Node StartNode; 
 
     [SerializeField] Movement movement;
 
