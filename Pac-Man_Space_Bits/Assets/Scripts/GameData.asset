@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33bc0f8481a49b240b115d4106bf8ea7, type: 3}
+  m_Name: GameData
+  m_EditorClassIdentifier: 
+  _currentScore: 0
+  _maxScore: 0
+  _levelPellets: {fileID: 11400000, guid: 173e5a88afb61ff4a9a00133099e752f, type: 2}
+  _levelSuperPellets: {fileID: 11400000, guid: bff15b5915b7e81488323d67129c5f92, type: 2}
