@@ -17,10 +17,18 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Pellet.onPelletCollected += RaiseScore;
-        SuperPellet.onSuperPelletCollected += RaiseScore;
+        SuperPellet.onSuperPelletCollected += SuperPelletTime;
 
-        gameData.CurrentScore = 0;
+        gameData.StartGameData();
         _maxScoreText.text = gameData.MaxScore.ToString();
+    }
+
+    void SuperPelletTime() 
+    {
+        RaiseScore();
+
+
+
     }
 
     void RaiseScore() 

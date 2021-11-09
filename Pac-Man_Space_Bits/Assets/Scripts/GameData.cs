@@ -15,13 +15,15 @@ public class GameData : ScriptableObject
     public PelletsSet LevelPellets { get => _levelPellets; set => _levelPellets = value; }
     public PelletsSet LevelSuperPellets { get => _levelSuperPellets; set => _levelSuperPellets = value; }
 
+    public void StartGameData() => CurrentScore = 0;
+
     public void EndGameData() 
     {
-        if (_currentScore > _maxScore)
+        if (CurrentScore > MaxScore)
         {
-            _maxScore = _currentScore;
+            MaxScore = CurrentScore;
         }
 
-        _currentScore = 0;
+        CurrentScore = 0;
     }
 }

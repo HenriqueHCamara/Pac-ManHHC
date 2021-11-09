@@ -7,7 +7,7 @@ public class Movement : MonoBehaviour
     [SerializeField] float _speed = 10f;
     [SerializeField] float _speedMultiplier = 1f;
 
-    Vector2 _currentMovement;
+    public Vector2 _currentMovement;
     Vector2 _nextMovement;
 
     [SerializeField] LayerMask _isOccupiedByWhat;
@@ -75,5 +75,14 @@ public class Movement : MonoBehaviour
         else
             _nextMovement = direction;
         
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        Vector2 position = transform.position;
+        Vector2 translation = _currentMovement * _speed * _speedMultiplier * Time.deltaTime;
+        Gizmos.DrawSphere(position + translation, 1f);
     }
 }

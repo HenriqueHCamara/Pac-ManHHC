@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,15 +6,28 @@ using UnityEngine;
 public class PacMan : Movement
 {
     [SerializeField] LayerMask _whatIsPellet;
-    [SerializeField] LayerMask _whatIsGhost;
 
+    public bool isPlayerInvincible;
+    
     private void Start()
     {
         PlayerInputHandler.onMovementInput += SetNextDirection;
     }
 
-    void Move()
-    {
+    public static event Action onPlayerDeath;
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Pellet"))
+        {
+            collision.GetComponent<ICollectible>().Collected();
+        }
+        if (collision.CompareTag("Ghost"))
+        {
+            if (!isPlayerInvincible)
+                onPlayerDeath?.Invoke();
+            else
+                collision.GetComponent<IGhost>().PlayerTouched();
+        }
     }
 }
