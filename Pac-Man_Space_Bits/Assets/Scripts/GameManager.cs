@@ -13,11 +13,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _gameOverText;
 
     [SerializeField] GameData gameData;
+    [SerializeField] PacMan PacMan;
+    [SerializeField] GhostsSet ghostSet;
     // Start is called before the first frame update
+
     void Start()
     {
         Pellet.onPelletCollected += RaiseScore;
         SuperPellet.onSuperPelletCollected += SuperPelletTime;
+
+        PacMan.onPlayerDeath += ProcessDeath;
 
         gameData.StartGameData();
         _maxScoreText.text = gameData.MaxScore.ToString();
@@ -29,6 +34,15 @@ public class GameManager : MonoBehaviour
 
 
 
+    }
+
+    void ProcessDeath()
+    {
+        PacMan.GetComponent<Movement>().CanMove = false;
+        foreach (var item in ghostSet.Items)
+        {
+            item.GetComponent<Movement>().CanMove = false;
+        }
     }
 
     void RaiseScore() 

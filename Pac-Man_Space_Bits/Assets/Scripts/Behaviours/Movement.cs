@@ -8,81 +8,78 @@ public class Movement : MonoBehaviour
     [SerializeField] float _speedMultiplier = 1f;
 
     public Vector2 _currentMovement;
-    Vector2 _nextMovement;
+    public Vector2 _nextMovement;
 
-    [SerializeField] LayerMask _isOccupiedByWhat;
-
-    Rigidbody2D rigidbody2D;
     Animator animator;
     BoxCollider2D boxCollider2D;
 
+    public bool CanMove;
+
+    public Node _currentNode;
+    Node _lastNode;
+
     private void Awake()
     {
-        if (!rigidbody2D)
-            rigidbody2D = GetComponent<Rigidbody2D>();
         if (!animator)
             animator = GetComponent<Animator>();
         if (!boxCollider2D)
             boxCollider2D = GetComponent<BoxCollider2D>();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     private void Update()
     {
-        
+        if (_currentNode && CanMove)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, _currentNode.transform.position, _speed * Time.deltaTime);
+            if (IsOnNode())
+                MoveToNextNode();
+
+        }
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private void MoveToNextNode()
     {
-        Move();
+        Node newNode = _currentNode.GetAvaiableNodeFromDirection(_nextMovement);
+
+        if (newNode)
+        {
+            _lastNode = _currentNode;
+            _currentNode = newNode;
+            _currentMovement = _nextMovement;
+        }
+        else
+        {
+            newNode = _currentNode.GetAvaiableNodeFromDirection(_currentMovement);
+            if (newNode)
+            {
+                _currentNode = newNode;
+            }
+            else
+            {
+                _currentMovement = Vector2.zero;
+            }
+
+        }
     }
 
-    public void Move()
+
+    public bool IsOnNode()
     {
-        Vector2 position = rigidbody2D.position;
-        Vector2 translation = _currentMovement * _speed * _speedMultiplier * Time.deltaTime;
-
-        rigidbody2D.MovePosition(position + translation);
-    }
-
-    public bool IsOccupied(Vector2 move)
-    {
-        Vector3 ls = transform.localScale / 6;
-
-        RaycastHit2D hit = Physics2D.BoxCast(transform.position,
-                                         ls,
-                                         0f,
-                                         move,
-                                         1f,
-                                         _isOccupiedByWhat);
-
-        return hit.collider != null;
+        if (transform.position == _currentNode.gameObject.transform.position)
+            return true;
+        else
+            return false;
     }
 
     public virtual void SetNextDirection(Vector2 direction)
     {
-        if (IsOccupied(direction))
-        {
-            _currentMovement = direction;
-            _nextMovement = Vector2.zero;
-        }
-        else
-            _nextMovement = direction;
-        
+        _nextMovement = direction;
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-
-        Vector2 position = transform.position;
-        Vector2 translation = _currentMovement * _speed * _speedMultiplier * Time.deltaTime;
-        Gizmos.DrawSphere(position + translation, 1f);
+        Vector2 pos = transform.position;
+        Gizmos.DrawSphere(_currentMovement + pos, .25f);
     }
 }
