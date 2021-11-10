@@ -131,7 +131,6 @@ public class GameManager : MonoBehaviour
             if (!_isCourotineActive_SuperPellet)
             {
                 GameTimer += Time.deltaTime;
-                print(GameTimer);
             }
         }
     }
