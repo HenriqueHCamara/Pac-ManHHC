@@ -6,6 +6,7 @@ public class Ghost : MonoBehaviour, IGhost
 {
     [SerializeField] public GhostsSet ghostsSet;
     [SerializeField] public Movement movement;
+    [SerializeField] public PacMan pacman;
 
     [SerializeField] public AnimationClip LookUp;
     [SerializeField] public AnimationClip LookDown;
@@ -60,53 +61,11 @@ public class Ghost : MonoBehaviour, IGhost
         _isScared = false;
     }
 
-    public void ReachedCenterOfNode(Node node)
+    public virtual void ReachedCenterOfNode(Node node)
     {
-        if (ghostNodeState == GhostNodeStateMachineEnum.MovingBetweenNodes)
-        {
-
-        }
-        else if (ghostNodeState == GhostNodeStateMachineEnum.Respawning)
-        {
-
-        }
-        else
-        {
-            if (CanLeaveHome)
-            {
-                if (ghostNodeState == GhostNodeStateMachineEnum.LeftNode)
-                {
-                    ghostNodeState = GhostNodeStateMachineEnum.CenterNode;
-                    movement.SetNextDirection(Vector2.right);
-                }
-                else if (ghostNodeState == GhostNodeStateMachineEnum.RightNode)
-                {
-                    ghostNodeState = GhostNodeStateMachineEnum.CenterNode;
-                    movement.SetNextDirection(Vector2.left);
-
-                }
-                else if(ghostNodeState == GhostNodeStateMachineEnum.CenterNode)
-                {
-                    ghostNodeState = GhostNodeStateMachineEnum.StartNode;
-                    movement.SetNextDirection(Vector2.up);
-
-                }
-                else if (ghostNodeState == GhostNodeStateMachineEnum.StartNode)
-                {
-                    ghostNodeState = GhostNodeStateMachineEnum.MovingBetweenNodes;
-                    movement.SetNextDirection(Vector2.right);
-
-                }
-            }
-        }
     }
 
-    void DetermineDirection()
-    {
-
-    }
-
-    void GetClosestDirectionToTarget(Vector2 ghostTarget)
+    public Vector2 GetClosestDirectionToTarget(Vector2 ghostTarget)
     {
         float shortestDistanceToTarget = 0;
         Vector2 lastMovingDirection = movement._lastMovement;
@@ -128,7 +87,7 @@ public class Ghost : MonoBehaviour, IGhost
 
         if (node.canMoveDown && !lastMovingDirection.Equals(Vector2.up))
         {
-            GameObject nodeDown = node.NodeUp;
+            GameObject nodeDown = node.NodeDown;
             float distanceBetweenNodeAndTarget = Vector2.Distance(nodeDown.transform.position, ghostTarget);
 
             if (distanceBetweenNodeAndTarget < shortestDistanceToTarget || shortestDistanceToTarget == 0)
@@ -140,7 +99,7 @@ public class Ghost : MonoBehaviour, IGhost
 
         if (node.canMoveRight && !lastMovingDirection.Equals(Vector2.left))
         {
-            GameObject nodeRight = node.NodeUp;
+            GameObject nodeRight = node.NodeRight;
             float distanceBetweenNodeAndTarget = Vector2.Distance(nodeRight.transform.position, ghostTarget);
 
             if (distanceBetweenNodeAndTarget < shortestDistanceToTarget || shortestDistanceToTarget == 0)
@@ -152,7 +111,7 @@ public class Ghost : MonoBehaviour, IGhost
 
         if (node.canMoveLeft && !lastMovingDirection.Equals(Vector2.right))
         {
-            GameObject nodeLeft = node.NodeUp;
+            GameObject nodeLeft = node.NodeLeft;
             float distanceBetweenNodeAndTarget = Vector2.Distance(nodeLeft.transform.position, ghostTarget);
 
             if (distanceBetweenNodeAndTarget < shortestDistanceToTarget || shortestDistanceToTarget == 0)
@@ -161,6 +120,8 @@ public class Ghost : MonoBehaviour, IGhost
                 newMovingDirection = Vector2.left;
             }
         }
+
+        return newMovingDirection;
     }
 
     public void ResetGhost()

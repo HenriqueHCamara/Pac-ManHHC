@@ -46,7 +46,6 @@ public class Movement : MonoBehaviour
         {
             _lastNode = _currentNode;
             _currentNode = newNode;
-            _lastMovement = _currentMovement;
             _currentMovement = _nextMovement;
         }
         else
@@ -59,6 +58,7 @@ public class Movement : MonoBehaviour
             else
             {
                 _currentMovement = Vector2.zero;
+
             }
 
         }
@@ -71,7 +71,8 @@ public class Movement : MonoBehaviour
         {
             if (IsGhost)
             {
-                GetComponent<Ghost>().ReachedCenterOfNode(_currentNode);
+                GetComponent<Blinky>().ReachedCenterOfNode(_currentNode);
+                //GetComponent<Ghost>().ReachedCenterOfNode(_currentNode);
             }
             return true;
         }

@@ -14088,6 +14088,10 @@ PrefabInstance:
       value: Blinky
       objectReference: {fileID: 0}
     - target: {fileID: 3418195331623152910, guid: 4bd1f5bc524b2ac47adbf6ee0a820eed, type: 3}
+      propertyPath: pacman
+      value: 
+      objectReference: {fileID: 1831697004}
+    - target: {fileID: 3418195331623152910, guid: 4bd1f5bc524b2ac47adbf6ee0a820eed, type: 3}
       propertyPath: StartingNode
       value: 
       objectReference: {fileID: 470678299}
