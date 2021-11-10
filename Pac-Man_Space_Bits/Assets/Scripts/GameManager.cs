@@ -63,6 +63,9 @@ public class GameManager : MonoBehaviour
         yield return new WaitUntil(() => GameTimer > 7);
         foreach (var item in ghostSet.Items)
         {
+            if (item.GetComponent<Pinky>())
+                item.CanLeaveHome = true;
+
             item.IsChaseMode = true;
         }
         yield return new WaitUntil(() => GameTimer > 12);
@@ -233,6 +236,14 @@ public class GameManager : MonoBehaviour
 
     void EndGame()
     {
+        foreach (var item in ghostSet.Items)
+        {
+            item.GetComponent<Movement>().CanMove = false;
+        }
+
+        PacMan.GetComponent<Movement>().CanMove = false;
+        PacMan.audioSource.Stop();
+
         _maxScoreText.text = gameData.MaxScore.ToString();
         _gameOverText.SetActive(true);
         gameData.EndGameData();
