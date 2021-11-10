@@ -13,7 +13,7 @@ public class Movement : MonoBehaviour
     Animator animator;
     BoxCollider2D boxCollider2D;
 
-    public bool CanMove;
+    public bool CanMove = true;
 
     public Node _currentNode;
     Node _lastNode;
@@ -33,7 +33,6 @@ public class Movement : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, _currentNode.transform.position, _speed * Time.deltaTime);
             if (IsOnNode())
                 MoveToNextNode();
-
         }
     }
 

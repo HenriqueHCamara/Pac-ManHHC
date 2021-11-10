@@ -108,6 +108,8 @@ MonoBehaviour:
   StartNode: {fileID: 0}
   movement: {fileID: 7917721501571644707}
   isPlayerInvincible: 0
+  audioSource: {fileID: 7247952631940991748}
+  startPosition: {x: 0, y: 0}
 --- !u!114 &7917721501571644707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,7 +126,7 @@ MonoBehaviour:
   _speedMultiplier: 1
   _currentMovement: {x: 0, y: 0}
   _nextMovement: {x: 0, y: 0}
-  _isMooving: 0
+  CanMove: 1
   _currentNode: {fileID: 0}
 --- !u!114 &7917721501571644718
 MonoBehaviour:

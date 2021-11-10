@@ -11,10 +11,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text _currentScoreText;
     [SerializeField] Text _maxScoreText;
     [SerializeField] GameObject _gameOverText;
+    [SerializeField] GameObject[] _LivesImages;
 
     [SerializeField] GameData gameData;
     [SerializeField] PacMan PacMan;
     [SerializeField] GhostsSet ghostSet;
+
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip deathClip;
+    [SerializeField] AudioClip SuperPillClip;
     // Start is called before the first frame update
 
     void Start()
@@ -28,24 +33,72 @@ public class GameManager : MonoBehaviour
         _maxScoreText.text = gameData.MaxScore.ToString();
     }
 
-    void SuperPelletTime() 
+    void SuperPelletTime()
     {
         RaiseScore();
 
+        audioSource.clip = SuperPillClip;
+        audioSource.Play();
+        audioSource.loop = true;
+        PacMan.GetComponent<PacMan>().isPlayerInvincible = true;
+        Invoke("StopSuperPelletTime", 10f);
+    }
 
-
+    void StopSuperPelletTime() 
+    {
+        audioSource.Stop();
+        audioSource.loop = false;
+        PacMan.GetComponent<PacMan>().isPlayerInvincible = false;
     }
 
     void ProcessDeath()
     {
-        PacMan.GetComponent<Movement>().CanMove = false;
+        PacMan.GetComponent<PacMan>().DiePacMan();
+
         foreach (var item in ghostSet.Items)
         {
             item.GetComponent<Movement>().CanMove = false;
         }
+
+
+        audioSource.clip = deathClip;
+        StartCoroutine(ProccessDeathcorotine());
     }
 
-    void RaiseScore() 
+    IEnumerator ProccessDeathcorotine()
+    {
+        audioSource.Play();
+        yield return new WaitUntil(() => audioSource.isPlaying == false);
+
+        if (gameData.CurrentLives > 0)
+        {
+            gameData.CurrentLives--;
+            for (int i = 0; i < _LivesImages.Length; i++)
+            {
+                if (gameData.CurrentLives < i + 1)
+                {
+                    _LivesImages[i].SetActive(false);
+                }
+            }
+            ResetLevel();
+        }
+        else
+        {
+            EndGame();
+        }
+    }
+
+    void ResetLevel()
+    {
+        PacMan.transform.position = PacMan.GetComponent<PacMan>().startPosition;
+        PacMan.GetComponent<PacMan>().ResetPacMan();
+        foreach (var item in ghostSet.Items)
+        {
+            item.GetComponent<Ghost>().ResetGhost();
+        }
+    }
+
+    void RaiseScore()
     {
         gameData.CurrentScore += 100;
         _currentScoreText.text = gameData.CurrentScore.ToString();
@@ -56,11 +109,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void EndGame() 
+    void EndGame()
     {
         _maxScoreText.text = gameData.MaxScore.ToString();
         _gameOverText.SetActive(true);
         gameData.EndGameData();
+        PacMan.GetComponent<AudioSource>().Stop();
         Time.timeScale = 0f;
     }
 }

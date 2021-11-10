@@ -14,7 +14,9 @@ public class PacMan : MonoBehaviour
 
     Animator Animator;
     SpriteRenderer spriteRenderer;
-    AudioSource audioSource;
+    public AudioSource audioSource;
+
+    public Vector2 startPosition;
 
     private void Start()
     {
@@ -34,6 +36,7 @@ public class PacMan : MonoBehaviour
         }
 
         movement._currentNode = StartNode;
+        startPosition = transform.position;
     }
 
     private void Update()
@@ -72,9 +75,28 @@ public class PacMan : MonoBehaviour
 
     public static event Action onPlayerDeath;
 
+    public void DiePacMan() 
+    {
+        movement._currentMovement = Vector2.zero;
+        movement._nextMovement = Vector2.zero;
+        audioSource.Stop();
+        movement.CanMove = false;
+        movement._currentNode = null;
+    }
+
+    public void ResetPacMan() 
+    {
+        Animator.SetTrigger("Reset");
+        audioSource.Stop();
+        movement.CanMove = true;
+        movement._currentNode = StartNode;
+    }
+
     [ContextMenu("Die")]
     public void DeathTrigger() 
     {
+        Animator.SetTrigger("Death");
+        audioSource.Stop();
         onPlayerDeath?.Invoke();
     }
 
@@ -87,7 +109,7 @@ public class PacMan : MonoBehaviour
         if (collision.CompareTag("Ghost"))
         {
             if (!isPlayerInvincible)
-                onPlayerDeath?.Invoke();
+                DeathTrigger();
             else
                 collision.GetComponent<IGhost>().PlayerTouched();
         }

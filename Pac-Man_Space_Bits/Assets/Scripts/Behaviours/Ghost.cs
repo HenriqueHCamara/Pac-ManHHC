@@ -17,6 +17,11 @@ public class Ghost : MonoBehaviour
         
     }
 
+    public void ResetGhost() 
+    {
+    
+    }
+
     private void OnEnable()
     {
         AddToSet();

@@ -19,9 +19,13 @@ public class GameData : ScriptableObject
     public int CurrentLives { get => _currentLives; set => _currentLives = value; }
     public int MaxLives { get => _maxLives; set => _maxLives = value; }
 
-    public void StartGameData() => CurrentScore = 0;
+    public void StartGameData()
+    {
+        CurrentScore = 0;
+        CurrentLives = MaxLives;
+    }
 
-    public void EndGameData() 
+    public void EndGameData()
     {
         if (CurrentScore > MaxScore)
         {
