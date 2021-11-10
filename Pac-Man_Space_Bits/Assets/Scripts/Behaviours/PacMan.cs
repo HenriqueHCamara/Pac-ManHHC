@@ -18,6 +18,8 @@ public class PacMan : MonoBehaviour
 
     public Vector2 startPosition;
 
+    bool isDying;
+
     private void Start()
     {
         PlayerInputHandler.onMovementInput += SetNextDirection;
@@ -37,6 +39,7 @@ public class PacMan : MonoBehaviour
 
         movement._currentNode = StartNode;
         startPosition = transform.position;
+        isDying = false;
     }
 
     private void OnDisable()
@@ -57,21 +60,24 @@ public class PacMan : MonoBehaviour
             if (!audioSource.isPlaying)
                 audioSource.Play();
 
-            if (movement._currentMovement == Vector2.up)
+            if (movement.CanMove)
             {
-                gameObject.transform.rotation = Quaternion.Euler(0, 0, 90);
-            }
-            else if (movement._currentMovement == Vector2.down)
-            {
-                gameObject.transform.rotation = Quaternion.Euler(0, 0, 270);
-            }
-            else if (movement._currentMovement == Vector2.right)
-            {
-                gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-            else
-            {
-                gameObject.transform.rotation = Quaternion.Euler(0, 0, 180);
+                if (movement._currentMovement == Vector2.up)
+                {
+                    gameObject.transform.rotation = Quaternion.Euler(0, 0, 90);
+                }
+                else if (movement._currentMovement == Vector2.down)
+                {
+                    gameObject.transform.rotation = Quaternion.Euler(0, 0, 270);
+                }
+                else if (movement._currentMovement == Vector2.right)
+                {
+                    gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+                }
+                else
+                {
+                    gameObject.transform.rotation = Quaternion.Euler(0, 0, 180);
+                }
             }
         }
     }
@@ -91,6 +97,8 @@ public class PacMan : MonoBehaviour
 
     public void ResetPacMan()
     {
+
+        isDying = false;
         Animator.SetTrigger("Reset");
         audioSource.Stop();
         movement.CanMove = true;
@@ -100,6 +108,9 @@ public class PacMan : MonoBehaviour
     [ContextMenu("Die")]
     public void DeathTrigger()
     {
+        if (isDying) return;
+        isDying = true;
+
         Animator.SetTrigger("Death");
         audioSource.Stop();
         onPlayerDeath?.Invoke();
@@ -115,6 +126,7 @@ public class PacMan : MonoBehaviour
         {
             if (!isPlayerInvincible)
                 DeathTrigger();
+
             else
             {
                 if (collision.GetComponent<Ghost>().AlreadyEatenDuringInvincibility)

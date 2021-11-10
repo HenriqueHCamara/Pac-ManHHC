@@ -12757,6 +12757,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1831697004}
     - target: {fileID: -6564077706774091892, guid: 56137a90dc5eb1f46aacf4bb6399d83a, type: 3}
+      propertyPath: CanLeaveHome
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6564077706774091892, guid: 56137a90dc5eb1f46aacf4bb6399d83a, type: 3}
       propertyPath: StartingNode
       value: 
       objectReference: {fileID: 1479047209}
@@ -14686,6 +14690,7 @@ MonoBehaviour:
   audioSource: {fileID: 774543282}
   deathClip: {fileID: 8300000, guid: 4edcf404ac9804943b7235206166adc0, type: 3}
   SuperPillClip: {fileID: 8300000, guid: 5f043f50027dcf9498c5eda774188533, type: 3}
+  GameBeginClip: {fileID: 8300000, guid: 4530e899f8e552b468f7296019bf8b7e, type: 3}
 --- !u!4 &774543281
 Transform:
   m_ObjectHideFlags: 0
@@ -24186,7 +24191,7 @@ PrefabInstance:
     - target: {fileID: -4355399024625125080, guid: 7105096314f1c3f44bef70c864f634ca, type: 3}
       propertyPath: StartingNode
       value: 
-      objectReference: {fileID: 470678299}
+      objectReference: {fileID: 1479047209}
     - target: {fileID: -4355399024625125080, guid: 7105096314f1c3f44bef70c864f634ca, type: 3}
       propertyPath: ghostNodeStart
       value: 

@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip deathClip;
     [SerializeField] AudioClip SuperPillClip;
+    [SerializeField] AudioClip GameBeginClip;
 
     bool isCourotineActive_SuperPellet;
     UnityEngine.Coroutine PelletTime;
@@ -38,6 +39,9 @@ public class GameManager : MonoBehaviour
 
         gameData.StartGameData();
         _maxScoreText.text = gameData.MaxScore.ToString();
+        _currentScoreText.text = gameData.CurrentScore.ToString();
+
+        StartCoroutine(BeginGame());
     }
 
     private void OnDisable()
@@ -84,6 +88,28 @@ public class GameManager : MonoBehaviour
 
     }
 
+    IEnumerator BeginGame() 
+    {
+        PacMan.GetComponent<Movement>().CanMove = false;
+
+        foreach (var item in ghostSet.Items)
+        {
+            item.GetComponent<Movement>().CanMove = false;
+        }
+
+        audioSource.clip = GameBeginClip;
+        audioSource.Play();
+
+        yield return new WaitUntil(() => audioSource.isPlaying == false);
+
+        foreach (var item in ghostSet.Items)
+        {
+            item.GetComponent<Movement>().CanMove = true;
+        }
+
+        PacMan.GetComponent<Movement>().CanMove = true;
+    }
+
     void ProcessDeath()
     {
         PacMan.GetComponent<PacMan>().DiePacMan();
@@ -92,7 +118,6 @@ public class GameManager : MonoBehaviour
         {
             item.GetComponent<Movement>().CanMove = false;
         }
-
 
         audioSource.clip = deathClip;
         StartCoroutine(ProccessDeathcorotine());

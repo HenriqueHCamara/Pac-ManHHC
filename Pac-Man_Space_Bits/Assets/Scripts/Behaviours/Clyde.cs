@@ -11,7 +11,6 @@ public class Clyde : Ghost, IGhost
 
         movement._currentNode = StartingNode.GetComponent<Node>();
         transform.position = StartingNode.transform.position;
-        CanLeaveHome = true;
     }
 
     void DetermineDirection()

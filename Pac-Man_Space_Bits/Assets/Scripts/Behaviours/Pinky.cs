@@ -7,11 +7,9 @@ public class Pinky : Ghost, IGhost
     private void Awake()
     {
         ghostNodeState = GhostNodeStateMachineEnum.StartNode;
-        StartingNode = ghostNodeStart;
 
         movement._currentNode = StartingNode.GetComponent<Node>();
         transform.position = StartingNode.transform.position;
-        CanLeaveHome = true;
     }
 
     void DetermineDirection()
