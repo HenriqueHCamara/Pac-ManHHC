@@ -24,8 +24,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioClip SuperPillClip;
     [SerializeField] AudioClip GameBeginClip;
 
-    bool isCourotineActive_SuperPellet;
+    bool _isCourotineActive_SuperPellet;
+    bool _isGameBeggining;
     UnityEngine.Coroutine PelletTime;
+
+    float GameTimer;
     // Start is called before the first frame update
 
     void Start()
@@ -42,6 +45,7 @@ public class GameManager : MonoBehaviour
         _currentScoreText.text = gameData.CurrentScore.ToString();
 
         StartCoroutine(BeginGame());
+        StartCoroutine(ProcessGameTimer());
     }
 
     private void OnDisable()
@@ -54,9 +58,65 @@ public class GameManager : MonoBehaviour
         PacMan.onPlayerDeath -= ProcessDeath;
     }
 
+    IEnumerator ProcessGameTimer()
+    {
+        yield return new WaitUntil(() => GameTimer > 7);
+        foreach (var item in ghostSet.Items)
+        {
+            item.IsChaseMode = true;
+        }
+        yield return new WaitUntil(() => GameTimer > 12);
+        foreach (var item in ghostSet.Items)
+        {
+            if (!item.CanLeaveHome)
+                item.CanLeaveHome = true;
+        }
+        yield return new WaitUntil(() => GameTimer > 20);
+        foreach (var item in ghostSet.Items)
+        {
+            item.IsChaseMode = false;
+        }
+        yield return new WaitUntil(() => GameTimer > 27);
+        foreach (var item in ghostSet.Items)
+        {
+            item.IsChaseMode = true;
+        }
+        yield return new WaitUntil(() => GameTimer > 47);
+        foreach (var item in ghostSet.Items)
+        {
+            item.IsChaseMode = false;
+        }
+        yield return new WaitUntil(() => GameTimer > 54);
+        foreach (var item in ghostSet.Items)
+        {
+            item.IsChaseMode = true;
+        }
+        yield return new WaitUntil(() => GameTimer > 61);
+        foreach (var item in ghostSet.Items)
+        {
+            item.IsChaseMode = false;
+        }
+        yield return new WaitUntil(() => GameTimer > 68);
+        foreach (var item in ghostSet.Items)
+        {
+            item.IsChaseMode = true;
+        }
+    }
+
+    private void Update()
+    {
+        if (!_isGameBeggining)
+        {
+            if (!_isCourotineActive_SuperPellet)
+            {
+                GameTimer += Time.deltaTime;
+            }
+        }
+    }
+
     void SuperPelletTime()
     {
-        if (!isCourotineActive_SuperPellet)
+        if (!_isCourotineActive_SuperPellet)
         {
             PelletTime = StartCoroutine(SuperPelletCoroutine());
         }
@@ -71,7 +131,7 @@ public class GameManager : MonoBehaviour
     public static event Action onSuperPelletStop;
     IEnumerator SuperPelletCoroutine()
     {
-        isCourotineActive_SuperPellet = true;
+        _isCourotineActive_SuperPellet = true;
         audioSource.Stop();
         audioSource.clip = SuperPillClip;
         audioSource.loop = false;
@@ -85,12 +145,13 @@ public class GameManager : MonoBehaviour
         audioSource.loop = false;
         PacMan.GetComponent<PacMan>().isPlayerInvincible = false;
         onSuperPelletStop?.Invoke();
-        isCourotineActive_SuperPellet = false;
+        _isCourotineActive_SuperPellet = false;
         yield return null;
     }
 
     IEnumerator BeginGame()
     {
+        _isGameBeggining = true;
         PacMan.GetComponent<Movement>().CanMove = false;
 
         foreach (var item in ghostSet.Items)
@@ -109,6 +170,7 @@ public class GameManager : MonoBehaviour
         }
 
         PacMan.GetComponent<Movement>().CanMove = true;
+        _isGameBeggining = false;
     }
 
     void ProcessDeath()
@@ -171,11 +233,6 @@ public class GameManager : MonoBehaviour
 
     void EndGame()
     {
-        if (gameData.CurrentLives > 0)
-        {
-            gameData.CurrentScore *= gameData.CurrentLives;
-        }
-
         _maxScoreText.text = gameData.MaxScore.ToString();
         _gameOverText.SetActive(true);
         gameData.EndGameData();

@@ -11,6 +11,8 @@ public class Clyde : Ghost, IGhost
 
         movement._currentNode = StartingNode.GetComponent<Node>();
         transform.position = StartingNode.transform.position;
+
+        IsChaseMode = false;
     }
 
     void DetermineDirection()
@@ -20,7 +22,7 @@ public class Clyde : Ghost, IGhost
         {
             direction = GetClosestDirectionToTarget(ghostTargetNode.transform.position);
         }
-        else
+        else if (IsChaseMode)
         {
             float distanceBetweenghostAndPacman = Vector2.Distance(transform.position, pacman.transform.position);
             float NodeDistance = 2f;
@@ -35,8 +37,10 @@ public class Clyde : Ghost, IGhost
             {
                 direction = GetClosestDirectionToTarget(ghostTargetNode.transform.position);
             }
-
-
+        }
+        else
+        {
+            direction = GetClosestDirectionToTarget(ghostTargetNode.transform.position);
         }
         movement._lastMovement = direction;
         movement.SetNextDirection(direction);

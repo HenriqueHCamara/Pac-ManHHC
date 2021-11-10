@@ -12,6 +12,8 @@ public class Pinky : Ghost, IGhost
 
         movement._currentNode = StartingNode.GetComponent<Node>();
         transform.position = StartingNode.transform.position;
+
+        IsChaseMode = false;
     }
 
     void DetermineDirection()
@@ -21,7 +23,7 @@ public class Pinky : Ghost, IGhost
         {
             direction = GetClosestDirectionToTarget(ghostTargetNode.transform.position);
         }
-        else
+        else if (IsChaseMode)
         {
             Vector2 pacmanDirection = pacman.GetComponent<Movement>()._currentMovement;
             float NodeDistance = 2f;
@@ -42,6 +44,10 @@ public class Pinky : Ghost, IGhost
 
 
             direction = GetClosestDirectionToTarget(target);
+        }
+        else
+        {
+            direction = GetClosestDirectionToTarget(ghostTargetNode.transform.position);
         }
         movement._lastMovement = direction;
         movement.SetNextDirection(direction);

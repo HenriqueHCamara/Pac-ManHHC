@@ -15,6 +15,8 @@ public class Inky : Ghost, IGhost
 
         movement._currentNode = StartingNode.GetComponent<Node>();
         transform.position = StartingNode.transform.position;
+
+        IsChaseMode = false;
     }
 
     void DetermineDirection()
@@ -24,7 +26,7 @@ public class Inky : Ghost, IGhost
         {
             direction = GetClosestDirectionToTarget(ghostTargetNode.transform.position);
         }
-        else
+        else if (IsChaseMode)
         {
             Vector2 pacmanDirection = pacman.GetComponent<Movement>()._currentMovement;
             float NodeDistance = 1f;
@@ -50,6 +52,10 @@ public class Inky : Ghost, IGhost
             newTarget = new Vector2(target.x + xDistance, target.y + yDistance);
 
             direction = GetClosestDirectionToTarget(newTarget);
+        }
+        else
+        {
+            direction = GetClosestDirectionToTarget(ghostTargetNode.transform.position);
         }
         movement._lastMovement = direction;
         movement.SetNextDirection(direction);
