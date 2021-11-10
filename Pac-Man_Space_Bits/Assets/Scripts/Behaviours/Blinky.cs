@@ -28,21 +28,19 @@ public class Blinky : Ghost
         movement._lastMovement = direction;
         movement.SetNextDirection(direction);
 
-        if (!pacman.isPlayerInvincible)
-        {
-            if (direction.Equals(Vector2.up))
-                animator.Play(LookUp.name);
 
-            else if (direction.Equals(Vector2.down))
-                animator.Play(LookDown.name);
+        if (direction.Equals(Vector2.up))
+            animator.Play(LookUp.name);
 
-            else if (direction.Equals(Vector2.right))
-                animator.Play(LookRight.name);
+        else if (direction.Equals(Vector2.down))
+            animator.Play(LookDown.name);
 
-            else
-                animator.Play(LookLeft.name);
+        else if (direction.Equals(Vector2.right))
+            animator.Play(LookRight.name);
 
-        }
+        else
+            animator.Play(LookLeft.name);
+
     }
 
     public override void ReachedCenterOfNode(Node node)
