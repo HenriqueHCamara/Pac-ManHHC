@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] PelletsSet pelletsSet;
-    [SerializeField] PelletsSet SuperPelletsSet;
-    [SerializeField] SceneController sceneController;
+    [SerializeField] PelletsSet _pelletsSet;
+    [SerializeField] PelletsSet _superPelletsSet;
+    [SerializeField] SceneController _sceneController;
 
     [SerializeField] Text _currentScoreText;
     [SerializeField] Text _maxScoreText;
@@ -16,14 +16,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text _livesHeader;
     [SerializeField] GameObject[] _LivesImages;
 
-    [SerializeField] GameData gameData;
-    [SerializeField] PacMan PacMan;
-    [SerializeField] GhostsSet ghostSet;
+    [SerializeField] GameData _gameData;
+    [SerializeField] PacMan _pacMan;
+    [SerializeField] GhostsSet _ghostSet;
 
-    [SerializeField] AudioSource audioSource;
-    [SerializeField] AudioClip deathClip;
-    [SerializeField] AudioClip SuperPillClip;
-    [SerializeField] AudioClip GameBeginClip;
+    [SerializeField] AudioSource _audioSource;
+    [SerializeField] AudioSource _SFXSource;
+    [SerializeField] AudioClip _deathClip;
+    [SerializeField] AudioClip _superPillClip;
+    [SerializeField] AudioClip _gameBeginClip;
+    [SerializeField] AudioClip _extraLifeClip;
 
     bool _isCourotineActive_SuperPellet;
     bool _isGameBeggining;
@@ -48,13 +50,13 @@ public class GameManager : MonoBehaviour
         _livesHeader.text = "LIVES 1UP";
 
         savedHighScore = SaveSystem.LoadHighScore();
-        gameData.StartGameData();
+        _gameData.StartGameData();
         _maxScoreText.text = SaveSystem.LoadHighScore().ToString();
-        _currentScoreText.text = gameData.CurrentScore.ToString();
+        _currentScoreText.text = _gameData.CurrentScore.ToString();
 
         for (int i = 0; i < _LivesImages.Length; i++)
         {
-            if (gameData.CurrentLives < i + 1)
+            if (_gameData.CurrentLives < i + 1)
             {
                 _LivesImages[i].SetActive(false);
             }
@@ -77,7 +79,7 @@ public class GameManager : MonoBehaviour
     IEnumerator ProcessGameTimer()
     {
         yield return new WaitUntil(() => GameTimer > 7);
-        foreach (var item in ghostSet.Items)
+        foreach (var item in _ghostSet.Items)
         {
             if (item.GetComponent<Pinky>())
                 item.CanLeaveHome = true;
@@ -85,38 +87,38 @@ public class GameManager : MonoBehaviour
             item.IsChaseMode = true;
         }
         yield return new WaitUntil(() => GameTimer > 12);
-        foreach (var item in ghostSet.Items)
+        foreach (var item in _ghostSet.Items)
         {
             if (!item.CanLeaveHome)
                 item.CanLeaveHome = true;
         }
         yield return new WaitUntil(() => GameTimer > 20);
-        foreach (var item in ghostSet.Items)
+        foreach (var item in _ghostSet.Items)
         {
             item.IsChaseMode = false;
         }
         yield return new WaitUntil(() => GameTimer > 27);
-        foreach (var item in ghostSet.Items)
+        foreach (var item in _ghostSet.Items)
         {
             item.IsChaseMode = true;
         }
         yield return new WaitUntil(() => GameTimer > 47);
-        foreach (var item in ghostSet.Items)
+        foreach (var item in _ghostSet.Items)
         {
             item.IsChaseMode = false;
         }
         yield return new WaitUntil(() => GameTimer > 54);
-        foreach (var item in ghostSet.Items)
+        foreach (var item in _ghostSet.Items)
         {
             item.IsChaseMode = true;
         }
         yield return new WaitUntil(() => GameTimer > 61);
-        foreach (var item in ghostSet.Items)
+        foreach (var item in _ghostSet.Items)
         {
             item.IsChaseMode = false;
         }
         yield return new WaitUntil(() => GameTimer > 68);
-        foreach (var item in ghostSet.Items)
+        foreach (var item in _ghostSet.Items)
         {
             item.IsChaseMode = true;
         }
@@ -151,18 +153,18 @@ public class GameManager : MonoBehaviour
     IEnumerator SuperPelletCoroutine()
     {
         _isCourotineActive_SuperPellet = true;
-        audioSource.Stop();
-        audioSource.clip = SuperPillClip;
-        audioSource.loop = false;
-        PacMan.GetComponent<PacMan>().isPlayerInvincible = true;
+        _audioSource.Stop();
+        _audioSource.clip = _superPillClip;
+        _audioSource.loop = false;
+        _pacMan.GetComponent<PacMan>().isPlayerInvincible = true;
         for (int i = 0; i < 3; i++)
         {
-            audioSource.Play();
-            yield return new WaitUntil(() => audioSource.isPlaying == false);
+            _audioSource.Play();
+            yield return new WaitUntil(() => _audioSource.isPlaying == false);
         }
-        audioSource.Stop();
-        audioSource.loop = false;
-        PacMan.GetComponent<PacMan>().isPlayerInvincible = false;
+        _audioSource.Stop();
+        _audioSource.loop = false;
+        _pacMan.GetComponent<PacMan>().isPlayerInvincible = false;
         onSuperPelletStop?.Invoke();
         _isCourotineActive_SuperPellet = false;
         _ghostsEatenInSuccession = 0;
@@ -172,52 +174,52 @@ public class GameManager : MonoBehaviour
     IEnumerator BeginGame()
     {
         _isGameBeggining = true;
-        PacMan.GetComponent<Movement>().CanMove = false;
+        _pacMan.GetComponent<Movement>().CanMove = false;
 
-        foreach (var item in ghostSet.Items)
+        foreach (var item in _ghostSet.Items)
         {
             item.GetComponent<Movement>().CanMove = false;
         }
 
-        audioSource.clip = GameBeginClip;
-        audioSource.Play();
+        _audioSource.clip = _gameBeginClip;
+        _audioSource.Play();
 
-        yield return new WaitUntil(() => audioSource.isPlaying == false);
+        yield return new WaitUntil(() => _audioSource.isPlaying == false);
 
-        foreach (var item in ghostSet.Items)
+        foreach (var item in _ghostSet.Items)
         {
             item.GetComponent<Movement>().CanMove = true;
         }
 
-        PacMan.GetComponent<Movement>().CanMove = true;
+        _pacMan.GetComponent<Movement>().CanMove = true;
         _isGameBeggining = false;
     }
 
     void ProcessDeath()
     {
-        PacMan.GetComponent<PacMan>().DiePacMan();
+        _pacMan.GetComponent<PacMan>().DiePacMan();
 
-        foreach (var item in ghostSet.Items)
+        foreach (var item in _ghostSet.Items)
         {
             item.GetComponent<Movement>().CanMove = false;
         }
 
-        audioSource.clip = deathClip;
+        _audioSource.clip = _deathClip;
         StartCoroutine(ProccessDeathcorotine());
     }
 
     IEnumerator ProccessDeathcorotine()
     {
-        audioSource.loop = false;
-        audioSource.Play();
-        yield return new WaitUntil(() => audioSource.isPlaying == false);
+        _audioSource.loop = false;
+        _audioSource.Play();
+        yield return new WaitUntil(() => _audioSource.isPlaying == false);
 
-        if (gameData.CurrentLives > 0)
+        if (_gameData.CurrentLives > 0)
         {
-            gameData.CurrentLives--;
+            _gameData.CurrentLives--;
             for (int i = 0; i < _LivesImages.Length; i++)
             {
-                if (gameData.CurrentLives < i + 1)
+                if (_gameData.CurrentLives < i + 1)
                 {
                     _LivesImages[i].SetActive(false);
                 }
@@ -233,9 +235,9 @@ public class GameManager : MonoBehaviour
 
     void ResetLevel()
     {
-        PacMan.transform.position = PacMan.GetComponent<PacMan>().startPosition;
-        PacMan.GetComponent<PacMan>().ResetPacMan();
-        foreach (var item in ghostSet.Items)
+        _pacMan.transform.position = _pacMan.GetComponent<PacMan>().startPosition;
+        _pacMan.GetComponent<PacMan>().ResetPacMan();
+        foreach (var item in _ghostSet.Items)
         {
             item.GetComponent<Ghost>().ResetGhost();
         }
@@ -254,18 +256,20 @@ public class GameManager : MonoBehaviour
 
     void RaiseScore(int score)
     {
-        gameData.CurrentScore += score;
+        _gameData.CurrentScore += score;
 
         if (!_alreadyGainedExtraLife)
         {
-            if (gameData.CurrentScore > 10000)
+            if (_gameData.CurrentScore > 10000)
             {
                 _livesHeader.text = "LIVES 0UP";
-                gameData.CurrentLives++;
+                _gameData.CurrentLives++;
                 _alreadyGainedExtraLife = true;
+                _SFXSource.clip = _extraLifeClip;
+                _SFXSource.Play();
                 for (int i = 0; i < _LivesImages.Length; i++)
                 {
-                    if (gameData.CurrentLives > i)
+                    if (_gameData.CurrentLives > i)
                     {
                         _LivesImages[i].SetActive(true);
                     }
@@ -274,9 +278,9 @@ public class GameManager : MonoBehaviour
         }
 
 
-        _currentScoreText.text = gameData.CurrentScore.ToString();
+        _currentScoreText.text = _gameData.CurrentScore.ToString();
 
-        if (gameData.LevelPellets.Items.Count == 0 && gameData.LevelSuperPellets.Items.Count == 0)
+        if (_gameData.LevelPellets.Items.Count == 0 && _gameData.LevelSuperPellets.Items.Count == 0)
         {
             SaveHighScore();
             EndGame();
@@ -285,33 +289,33 @@ public class GameManager : MonoBehaviour
 
     void SaveHighScore()
     {
-        if (gameData.CurrentScore > savedHighScore)
+        if (_gameData.CurrentScore > savedHighScore)
         {
-            SaveSystem.SaveHighScore(gameData.CurrentScore);
-            savedHighScore = gameData.CurrentScore;
+            SaveSystem.SaveHighScore(_gameData.CurrentScore);
+            savedHighScore = _gameData.CurrentScore;
         }
     }
 
     void EndGame()
     {
-        foreach (var item in ghostSet.Items)
+        foreach (var item in _ghostSet.Items)
         {
             item.GetComponent<Movement>().CanMove = false;
         }
 
-        PacMan.GetComponent<Movement>().CanMove = false;
-        PacMan.audioSource.Stop();
+        _pacMan.GetComponent<Movement>().CanMove = false;
+        _pacMan.audioSource.Stop();
 
         _maxScoreText.text = savedHighScore.ToString();
         _gameOverText.SetActive(true);
-        gameData.EndGameData();
-        PacMan.GetComponent<AudioSource>().Stop();
+        _gameData.EndGameData();
+        _pacMan.GetComponent<AudioSource>().Stop();
         StartCoroutine(GoBackToMenu());
     }
 
     IEnumerator GoBackToMenu()
     {
         yield return new WaitForSecondsRealtime(2f);
-        sceneController.LoadSceneByName("Intro");
+        _sceneController.LoadSceneByName("Intro");
     }
 }
