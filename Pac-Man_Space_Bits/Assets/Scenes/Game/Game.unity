@@ -14113,7 +14113,7 @@ PrefabInstance:
       objectReference: {fileID: 1479047209}
     - target: {fileID: 4561517926747495592, guid: 4bd1f5bc524b2ac47adbf6ee0a820eed, type: 3}
       propertyPath: _speed
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4561517926747495592, guid: 4bd1f5bc524b2ac47adbf6ee0a820eed, type: 3}
       propertyPath: IsGhost

@@ -13,11 +13,27 @@ public class Blinky : Ghost
         transform.position = StartingNode.transform.position;
     }
 
-    void DetermineDirection() 
+    void DetermineDirection()
     {
         Vector2 direction = GetClosestDirectionToTarget(pacman.transform.position);
         movement._lastMovement = direction;
         movement.SetNextDirection(direction);
+
+        if (!pacman.isPlayerInvincible)
+        {
+            if (direction.Equals(Vector2.up))
+                animator.Play(LookUp.name);
+
+            else if (direction.Equals(Vector2.down))
+                animator.Play(LookDown.name);
+
+            else if (direction.Equals(Vector2.right))
+                animator.Play(LookRight.name);
+
+            else
+                animator.Play(LookLeft.name);
+
+        }
     }
 
     public override void ReachedCenterOfNode(Node node)

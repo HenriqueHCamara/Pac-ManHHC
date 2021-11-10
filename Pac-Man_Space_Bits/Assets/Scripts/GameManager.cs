@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     {
         Pellet.onPelletCollected += RaiseScore;
         SuperPellet.onSuperPelletCollected += SuperPelletTime;
+        SuperPellet.onSuperPelletDone += RaiseScore;
 
         PacMan.onPlayerDeath += ProcessDeath;
 
@@ -35,8 +36,6 @@ public class GameManager : MonoBehaviour
 
     void SuperPelletTime()
     {
-        RaiseScore();
-
         audioSource.clip = SuperPillClip;
         audioSource.Play();
         audioSource.loop = true;
