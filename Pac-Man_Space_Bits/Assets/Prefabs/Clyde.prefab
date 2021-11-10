@@ -13,9 +13,11 @@ GameObject:
   - component: {fileID: 1271597146130597457}
   - component: {fileID: 8109808980686283242}
   - component: {fileID: 2975730560361656973}
-  m_Layer: 0
+  - component: {fileID: 4561517926747495592}
+  - component: {fileID: -6564077706774091892}
+  m_Layer: 7
   m_Name: Clyde
-  m_TagString: Untagged
+  m_TagString: Ghost
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 780547475
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4041022091682639524, guid: c53de32cd97b33a4392c6dec90292d3f, type: 3}
+  m_Sprite: {fileID: -5611892038287792045, guid: c53de32cd97b33a4392c6dec90292d3f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -95,7 +97,7 @@ Animator:
   m_GameObject: {fileID: 1271597146130597458}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6d1e9c5df6f222941941610a0f2448f3, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -151,3 +153,57 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
+--- !u!114 &4561517926747495592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271597146130597458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1224e406e9d408645a2a4d1517f19245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 10
+  _speedMultiplier: 1
+  _currentMovement: {x: 0, y: 0}
+  _nextMovement: {x: 0, y: 0}
+  _lastMovement: {x: 0, y: 0}
+  CanMove: 1
+  IsGhost: 0
+  _currentNode: {fileID: 0}
+--- !u!114 &-6564077706774091892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271597146130597458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e01d05a19eb3a2847a819c6e6246fccf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostsSet: {fileID: 11400000, guid: 1e6645edb75d43e4ca044ecadf8967a3, type: 2}
+  movement: {fileID: 4561517926747495592}
+  pacman: {fileID: 0}
+  LookUp: {fileID: 7400000, guid: 2873bba05c62b3049b629d2b93b4dc9c, type: 2}
+  LookDown: {fileID: 7400000, guid: 476708160518e2f4bb62e74bb1917bbd, type: 2}
+  LookRight: {fileID: 7400000, guid: 3c34b82c74ba143498a4b9f5c0dd86cc, type: 2}
+  LookLeft: {fileID: 7400000, guid: 7581fee845eb1784e8fd73d6c8c3f3b3, type: 2}
+  Scared: {fileID: 7400000, guid: 77b674031ed0ecf438f9b66e6aec66b0, type: 2}
+  animator: {fileID: 1271597146130597457}
+  NormalController: {fileID: 9100000, guid: 6d1e9c5df6f222941941610a0f2448f3, type: 2}
+  ScaredController: {fileID: 9100000, guid: e015b27e1284a9c44aedc3c9384293f6, type: 2}
+  ghostNodeStart: {fileID: 0}
+  ghostNodeCenter: {fileID: 0}
+  ghostNodeLeft: {fileID: 0}
+  ghostNodeRight: {fileID: 0}
+  ghostTargetNode: {fileID: 0}
+  StartingNode: {fileID: 0}
+  CanLeaveHome: 0
+  IsChaseMode: 0
+  AlreadyEatenDuringInvincibility: 0
+  ghostNodeState: 0
+  ghostRespawnState: 0
