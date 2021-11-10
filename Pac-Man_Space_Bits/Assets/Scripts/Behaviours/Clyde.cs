@@ -7,7 +7,7 @@ public class Clyde : Ghost, IGhost
     private void Awake()
     {
         ghostNodeState = GhostNodeStateMachineEnum.StartNode;
-        
+
 
         movement._currentNode = StartingNode.GetComponent<Node>();
         transform.position = StartingNode.transform.position;
@@ -22,7 +22,21 @@ public class Clyde : Ghost, IGhost
         }
         else
         {
-            direction = GetClosestDirectionToTarget(pacman.transform.position);
+            float distanceBetweenghostAndPacman = Vector2.Distance(transform.position, pacman.transform.position);
+            float NodeDistance = 2f;
+
+            if (distanceBetweenghostAndPacman < 0) distanceBetweenghostAndPacman *= -1;
+
+            if (distanceBetweenghostAndPacman <= NodeDistance * 4)
+            {
+                direction = GetClosestDirectionToTarget(pacman.transform.position);
+            }
+            else
+            {
+                direction = GetClosestDirectionToTarget(ghostTargetNode.transform.position);
+            }
+
+
         }
         movement._lastMovement = direction;
         movement.SetNextDirection(direction);

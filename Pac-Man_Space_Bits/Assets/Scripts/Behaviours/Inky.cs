@@ -27,7 +27,7 @@ public class Inky : Ghost, IGhost
         else
         {
             Vector2 pacmanDirection = pacman.GetComponent<Movement>()._currentMovement;
-            float NodeDistance = 2f;
+            float NodeDistance = 1f;
 
             Vector2 target = pacman.transform.position;
 

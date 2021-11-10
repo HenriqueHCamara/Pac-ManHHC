@@ -17086,7 +17086,7 @@ PrefabInstance:
       objectReference: {fileID: 1831697004}
     - target: {fileID: -2661652656420067348, guid: db5171dba05aee94299f0a2bcbfd66b7, type: 3}
       propertyPath: CanLeaveHome
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -2661652656420067348, guid: db5171dba05aee94299f0a2bcbfd66b7, type: 3}
       propertyPath: StartingNode
