@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
         SuperPellet.onSuperPelletCollected += SuperPelletTime;
         SuperPellet.onSuperPelletDone += RaiseScore;
 
+        Ghost.onGhostEaten += RaiseScore;
         PacMan.onPlayerDeath += ProcessDeath;
 
         gameData.StartGameData();
