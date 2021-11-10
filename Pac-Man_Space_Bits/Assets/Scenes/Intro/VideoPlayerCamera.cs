@@ -30,7 +30,7 @@ public class VideoPlayerCamera : MonoBehaviour
 
         // Set the video to play. URL supports local absolute or relative paths.
         // Here, using absolute.
-        videoPlayer.url = "Assets/Video/videoplayback.mp4";
+        videoPlayer.url = Application.persistentDataPath + "/Assets/Video/videoplayback.mp4";
 
         // Skip the first 100 frames.
         videoPlayer.frame = 330;

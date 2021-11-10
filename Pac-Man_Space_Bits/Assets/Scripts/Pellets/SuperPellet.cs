@@ -6,14 +6,14 @@ using UnityEngine;
 public class SuperPellet : Pellet
 {
     public static event Action onSuperPelletCollected;
-    public static event Action onSuperPelletDone;
+    public static event Action<int> onSuperPelletDone;
     public override IEnumerator CollectSequence()
     {
         onSuperPelletCollected?.Invoke();
         spriteRenderer.enabled = false;
         audioSource.Play();
         yield return new WaitForSeconds(audioSource.clip.length);
-        onSuperPelletDone?.Invoke();
+        onSuperPelletDone?.Invoke(50);
         this.gameObject.SetActive(false);
     }
 }

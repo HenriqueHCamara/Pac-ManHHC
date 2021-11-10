@@ -175,10 +175,10 @@ public class Ghost : MonoBehaviour, IGhost
 
     public void resetAlreadyEaten() => AlreadyEatenDuringInvincibility = false;
 
-    public static event Action onGhostEaten;
+    public static event Action<int> onGhostEaten;
     public void PlayerTouched()
     {
-        onGhostEaten?.Invoke();
+        onGhostEaten?.Invoke(200);
         AlreadyEatenDuringInvincibility = true;
         ghostNodeState = GhostNodeStateMachineEnum.Respawning;
         transform.position = ghostNodeCenter.transform.position;

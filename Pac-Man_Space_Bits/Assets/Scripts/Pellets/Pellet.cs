@@ -10,7 +10,7 @@ public class Pellet : MonoBehaviour, ICollectible
     [SerializeField] public AudioSource audioSource;
     [SerializeField] public SpriteRenderer spriteRenderer;
 
-    public static event Action onPelletCollected;
+    public static event Action<int> onPelletCollected;
     [ContextMenu("Collect")]
     public void Collected()
     {
@@ -23,7 +23,7 @@ public class Pellet : MonoBehaviour, ICollectible
         audioSource.Play();
         yield return new WaitForSeconds(audioSource.clip.length);
         this.gameObject.SetActive(false);
-        onPelletCollected?.Invoke();
+        onPelletCollected?.Invoke(10);
     }
 
     private void OnEnable()

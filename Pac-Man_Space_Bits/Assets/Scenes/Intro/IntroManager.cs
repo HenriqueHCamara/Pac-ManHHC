@@ -11,6 +11,7 @@ public class IntroManager : MonoBehaviour
 
     private void Start()
     {
-        HighScoreText.text = "HIGH SCORE .......... " + gameData.MaxScore.ToString();
+        int highscore = SaveSystem.LoadHighScore();
+        HighScoreText.text = "HIGH SCORE .......... " + highscore;
     }
 }

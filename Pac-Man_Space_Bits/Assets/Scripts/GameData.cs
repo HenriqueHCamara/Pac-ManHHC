@@ -22,7 +22,7 @@ public class GameData : ScriptableObject
     public void StartGameData()
     {
         CurrentScore = 0;
-        CurrentLives = MaxLives;
+        CurrentLives = MaxLives - 1;
     }
 
     public void EndGameData()
@@ -33,6 +33,6 @@ public class GameData : ScriptableObject
         }
 
         CurrentScore = 0;
-        CurrentLives = MaxLives;
+        CurrentLives = MaxLives - 1;
     }
 }

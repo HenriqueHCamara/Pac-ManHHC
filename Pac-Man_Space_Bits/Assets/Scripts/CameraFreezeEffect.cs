@@ -14,7 +14,7 @@ public class CameraFreezeEffect : MonoBehaviour
         Ghost.onGhostEaten -= FreezeGame;
     }
 
-    void FreezeGame() 
+    void FreezeGame(int value) 
     {
         StartCoroutine(freezeFrame());
     }

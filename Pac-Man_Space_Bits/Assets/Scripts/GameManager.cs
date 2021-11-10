@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Text _currentScoreText;
     [SerializeField] Text _maxScoreText;
     [SerializeField] GameObject _gameOverText;
+    [SerializeField] Text _livesHeader;
     [SerializeField] GameObject[] _LivesImages;
 
     [SerializeField] GameData gameData;
@@ -29,6 +30,10 @@ public class GameManager : MonoBehaviour
     UnityEngine.Coroutine PelletTime;
 
     float GameTimer;
+    int savedHighScore;
+    bool _alreadyGainedExtraLife;
+    int _ghostsEatenInSuccession;
+
     // Start is called before the first frame update
 
     void Start()
@@ -37,12 +42,23 @@ public class GameManager : MonoBehaviour
         SuperPellet.onSuperPelletCollected += SuperPelletTime;
         SuperPellet.onSuperPelletDone += RaiseScore;
 
-        Ghost.onGhostEaten += RaiseScore;
+        Ghost.onGhostEaten += GhostScoreSequence;
         PacMan.onPlayerDeath += ProcessDeath;
 
+        _livesHeader.text = "LIVES 1UP";
+
+        savedHighScore = SaveSystem.LoadHighScore();
         gameData.StartGameData();
-        _maxScoreText.text = gameData.MaxScore.ToString();
+        _maxScoreText.text = SaveSystem.LoadHighScore().ToString();
         _currentScoreText.text = gameData.CurrentScore.ToString();
+
+        for (int i = 0; i < _LivesImages.Length; i++)
+        {
+            if (gameData.CurrentLives < i + 1)
+            {
+                _LivesImages[i].SetActive(false);
+            }
+        }
 
         StartCoroutine(BeginGame());
         StartCoroutine(ProcessGameTimer());
@@ -54,7 +70,7 @@ public class GameManager : MonoBehaviour
         SuperPellet.onSuperPelletCollected -= SuperPelletTime;
         SuperPellet.onSuperPelletDone -= RaiseScore;
 
-        Ghost.onGhostEaten -= RaiseScore;
+        Ghost.onGhostEaten -= GhostScoreSequence;
         PacMan.onPlayerDeath -= ProcessDeath;
     }
 
@@ -149,6 +165,7 @@ public class GameManager : MonoBehaviour
         PacMan.GetComponent<PacMan>().isPlayerInvincible = false;
         onSuperPelletStop?.Invoke();
         _isCourotineActive_SuperPellet = false;
+        _ghostsEatenInSuccession = 0;
         yield return null;
     }
 
@@ -209,6 +226,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            SaveHighScore();
             EndGame();
         }
     }
@@ -223,14 +241,54 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void RaiseScore()
+    void GhostScoreSequence(int value)
     {
-        gameData.CurrentScore += 100;
+        if (_ghostsEatenInSuccession <= 4)
+            _ghostsEatenInSuccession++;
+
+        if (_ghostsEatenInSuccession == 0)
+            RaiseScore(200);
+        else
+            RaiseScore(200 ^ _ghostsEatenInSuccession);
+    }
+
+    void RaiseScore(int score)
+    {
+        gameData.CurrentScore += score;
+
+        if (!_alreadyGainedExtraLife)
+        {
+            if (gameData.CurrentScore > 10000)
+            {
+                _livesHeader.text = "LIVES 0UP";
+                gameData.CurrentLives++;
+                _alreadyGainedExtraLife = true;
+                for (int i = 0; i < _LivesImages.Length; i++)
+                {
+                    if (gameData.CurrentLives > i)
+                    {
+                        _LivesImages[i].SetActive(true);
+                    }
+                }
+            }
+        }
+
+
         _currentScoreText.text = gameData.CurrentScore.ToString();
 
         if (gameData.LevelPellets.Items.Count == 0 && gameData.LevelSuperPellets.Items.Count == 0)
         {
+            SaveHighScore();
             EndGame();
+        }
+    }
+
+    void SaveHighScore()
+    {
+        if (gameData.CurrentScore > savedHighScore)
+        {
+            SaveSystem.SaveHighScore(gameData.CurrentScore);
+            savedHighScore = gameData.CurrentScore;
         }
     }
 
@@ -244,7 +302,7 @@ public class GameManager : MonoBehaviour
         PacMan.GetComponent<Movement>().CanMove = false;
         PacMan.audioSource.Stop();
 
-        _maxScoreText.text = gameData.MaxScore.ToString();
+        _maxScoreText.text = savedHighScore.ToString();
         _gameOverText.SetActive(true);
         gameData.EndGameData();
         PacMan.GetComponent<AudioSource>().Stop();
