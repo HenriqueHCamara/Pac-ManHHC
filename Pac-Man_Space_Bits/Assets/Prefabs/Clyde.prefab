@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8109808980686283242}
   - component: {fileID: 2975730560361656973}
   m_Layer: 0
-  m_Name: Ghost
+  m_Name: Clyde
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

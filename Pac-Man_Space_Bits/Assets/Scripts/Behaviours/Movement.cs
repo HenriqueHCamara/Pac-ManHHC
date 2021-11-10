@@ -9,11 +9,13 @@ public class Movement : MonoBehaviour
 
     public Vector2 _currentMovement;
     public Vector2 _nextMovement;
+    public Vector2 _lastMovement;
 
     Animator animator;
     BoxCollider2D boxCollider2D;
 
     public bool CanMove = true;
+    public bool IsGhost = false;
 
     public Node _currentNode;
     Node _lastNode;
@@ -44,6 +46,7 @@ public class Movement : MonoBehaviour
         {
             _lastNode = _currentNode;
             _currentNode = newNode;
+            _lastMovement = _currentMovement;
             _currentMovement = _nextMovement;
         }
         else
@@ -65,7 +68,13 @@ public class Movement : MonoBehaviour
     public bool IsOnNode()
     {
         if (transform.position == _currentNode.gameObject.transform.position)
+        {
+            if (IsGhost)
+            {
+                GetComponent<Ghost>().ReachedCenterOfNode(_currentNode);
+            }
             return true;
+        }
         else
             return false;
     }
