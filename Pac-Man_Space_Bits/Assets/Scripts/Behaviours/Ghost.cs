@@ -34,6 +34,9 @@ public class Ghost : MonoBehaviour, IGhost
     public GhostNodeStateMachineEnum ghostNodeState;
     public GhostNodeStateMachineEnum ghostRespawnState;
 
+    UnityEngine.Coroutine PelletTime;
+    bool isPelletTimeRunning;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -51,16 +54,28 @@ public class Ghost : MonoBehaviour, IGhost
         movement.IsGhost = true;
     }
 
-    public void PlayerCollectedSuperPellet() 
+    public void PlayerCollectedSuperPellet()
     {
+        AlreadyEatenDuringInvincibility = false;
+        animator.runtimeAnimatorController = NormalController;
         animator.runtimeAnimatorController = ScaredController;
-        StartCoroutine(ScaredSequence());
+        if (!isPelletTimeRunning)
+        {
+            PelletTime = StartCoroutine(ScaredSequence());
+        }
+        else
+        {
+            StopCoroutine(PelletTime);
+            PelletTime = StartCoroutine(ScaredSequence());
+        }
     }
 
-    IEnumerator ScaredSequence() 
+    IEnumerator ScaredSequence()
     {
+        isPelletTimeRunning = true;
         yield return new WaitForSeconds(10f);
         animator.runtimeAnimatorController = NormalController;
+        isPelletTimeRunning = false;
     }
 
     public virtual void ReachedCenterOfNode(Node node)

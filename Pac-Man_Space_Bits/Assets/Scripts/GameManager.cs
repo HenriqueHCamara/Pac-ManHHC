@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip deathClip;
     [SerializeField] AudioClip SuperPillClip;
+
+    bool isCourotineActive_SuperPellet;
+    UnityEngine.Coroutine PelletTime;
     // Start is called before the first frame update
 
     void Start()
@@ -49,20 +52,36 @@ public class GameManager : MonoBehaviour
 
     void SuperPelletTime()
     {
+        if (!isCourotineActive_SuperPellet)
+        {
+            PelletTime = StartCoroutine(SuperPelletCoroutine());
+        }
+        else
+        {
+            StopCoroutine(PelletTime);
+            PelletTime = StartCoroutine(SuperPelletCoroutine());
+        }
+
+    }
+
+    public static event Action onSuperPelletStop;
+    IEnumerator SuperPelletCoroutine()
+    {
+
+        isCourotineActive_SuperPellet = true;
+        audioSource.Stop();
         audioSource.clip = SuperPillClip;
         audioSource.Play();
         audioSource.loop = true;
         PacMan.GetComponent<PacMan>().isPlayerInvincible = true;
-        Invoke("StopSuperPelletTime", 10f);
-    }
-
-    public static event Action onSuperPelletStop;
-    void StopSuperPelletTime() 
-    {
+        yield return new WaitUntil(() => audioSource.isPlaying == false);
         audioSource.Stop();
         audioSource.loop = false;
         PacMan.GetComponent<PacMan>().isPlayerInvincible = false;
         onSuperPelletStop?.Invoke();
+        isCourotineActive_SuperPellet = false;
+        yield return null;
+
     }
 
     void ProcessDeath()
@@ -133,7 +152,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(GoBackToMenu());
     }
 
-    IEnumerator GoBackToMenu() 
+    IEnumerator GoBackToMenu()
     {
         yield return new WaitForSecondsRealtime(2f);
         sceneController.LoadSceneByName("Intro");
