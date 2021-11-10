@@ -152,6 +152,9 @@ public class Ghost : MonoBehaviour, IGhost
         {
             ghostsSet.Remove(this);
         }
+        SuperPellet.onSuperPelletCollected -= PlayerCollectedSuperPellet;
+        GameManager.onSuperPelletStop -= resetAlreadyEaten;
+
     }
 
     public void resetAlreadyEaten() => AlreadyEatenDuringInvincibility = false;

@@ -39,6 +39,11 @@ public class PacMan : MonoBehaviour
         startPosition = transform.position;
     }
 
+    private void OnDisable()
+    {
+        PlayerInputHandler.onMovementInput -= SetNextDirection;
+    }
+
     private void Update()
     {
         if (movement._currentMovement == Vector2.zero)

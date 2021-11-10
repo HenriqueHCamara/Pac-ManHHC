@@ -14489,6 +14489,7 @@ GameObject:
   - component: {fileID: 774543281}
   - component: {fileID: 774543280}
   - component: {fileID: 774543282}
+  - component: {fileID: 774543283}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -14510,6 +14511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pelletsSet: {fileID: 11400000, guid: 173e5a88afb61ff4a9a00133099e752f, type: 2}
   SuperPelletsSet: {fileID: 11400000, guid: bff15b5915b7e81488323d67129c5f92, type: 2}
+  sceneController: {fileID: 774543283}
   _currentScoreText: {fileID: 833838401}
   _maxScoreText: {fileID: 334000270}
   _gameOverText: {fileID: 1903729168}
@@ -14633,6 +14635,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &774543283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774543279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78367e1162135f54eb94c072c3c91144, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &781288833
 PrefabInstance:
   m_ObjectHideFlags: 0

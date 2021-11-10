@@ -9,6 +9,10 @@ public class CameraFreezeEffect : MonoBehaviour
     {
         Ghost.onGhostEaten += FreezeGame;
     }
+    private void OnDisable()
+    {
+        Ghost.onGhostEaten -= FreezeGame;
+    }
 
     void FreezeGame() 
     {

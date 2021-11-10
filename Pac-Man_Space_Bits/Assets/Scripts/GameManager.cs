@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] PelletsSet pelletsSet;
     [SerializeField] PelletsSet SuperPelletsSet;
+    [SerializeField] SceneController sceneController;
 
     [SerializeField] Text _currentScoreText;
     [SerializeField] Text _maxScoreText;
@@ -34,6 +35,16 @@ public class GameManager : MonoBehaviour
 
         gameData.StartGameData();
         _maxScoreText.text = gameData.MaxScore.ToString();
+    }
+
+    private void OnDisable()
+    {
+        Pellet.onPelletCollected -= RaiseScore;
+        SuperPellet.onSuperPelletCollected -= SuperPelletTime;
+        SuperPellet.onSuperPelletDone -= RaiseScore;
+
+        Ghost.onGhostEaten -= RaiseScore;
+        PacMan.onPlayerDeath -= ProcessDeath;
     }
 
     void SuperPelletTime()
@@ -70,6 +81,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ProccessDeathcorotine()
     {
+        audioSource.loop = false;
         audioSource.Play();
         yield return new WaitUntil(() => audioSource.isPlaying == false);
 
@@ -118,6 +130,12 @@ public class GameManager : MonoBehaviour
         _gameOverText.SetActive(true);
         gameData.EndGameData();
         PacMan.GetComponent<AudioSource>().Stop();
-        Time.timeScale = 0f;
+        StartCoroutine(GoBackToMenu());
+    }
+
+    IEnumerator GoBackToMenu() 
+    {
+        yield return new WaitForSecondsRealtime(2f);
+        sceneController.LoadSceneByName("Intro");
     }
 }
