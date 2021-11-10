@@ -11,11 +11,20 @@ public class Blinky : Ghost
 
         movement._currentNode = StartingNode.GetComponent<Node>();
         transform.position = StartingNode.transform.position;
+        CanLeaveHome = true;
     }
 
     void DetermineDirection()
     {
-        Vector2 direction = GetClosestDirectionToTarget(pacman.transform.position);
+        Vector2 direction = Vector2.zero;
+        if (pacman.isPlayerInvincible && !AlreadyEatenDuringInvincibility)
+        {
+            direction = GetClosestDirectionToTarget(ghostTargetNode.transform.position);
+        }
+        else
+        {
+            direction = GetClosestDirectionToTarget(pacman.transform.position);
+        }
         movement._lastMovement = direction;
         movement.SetNextDirection(direction);
 
@@ -44,7 +53,7 @@ public class Blinky : Ghost
         }
         else if (ghostNodeState == GhostNodeStateMachineEnum.Respawning)
         {
-
+            ghostNodeState = ghostRespawnState;
         }
         else
         {

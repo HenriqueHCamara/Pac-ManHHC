@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Ghost : MonoBehaviour, IGhost
 {
-    [SerializeField] public GhostsSet ghostsSet;
+    public GhostsSet ghostsSet;
     [SerializeField] public Movement movement;
     [SerializeField] public PacMan pacman;
 
@@ -22,14 +23,16 @@ public class Ghost : MonoBehaviour, IGhost
     [SerializeField] public GameObject ghostNodeCenter;
     [SerializeField] public GameObject ghostNodeLeft;
     [SerializeField] public GameObject ghostNodeRight;
+    [SerializeField] public GameObject ghostTargetNode;
 
     [SerializeField] public GameObject StartingNode;
     [SerializeField] public bool CanLeaveHome = false;
+    [SerializeField] public bool IsChaseMode = false;
+    public bool AlreadyEatenDuringInvincibility = false;
 
     public enum GhostNodeStateMachineEnum { Respawning, LeftNode, RightNode, CenterNode, StartNode, MovingBetweenNodes }
     public GhostNodeStateMachineEnum ghostNodeState;
-
-    bool _isScared;
+    public GhostNodeStateMachineEnum ghostRespawnState;
 
     // Start is called before the first frame update
     void Awake()
@@ -43,13 +46,13 @@ public class Ghost : MonoBehaviour, IGhost
     private void Start()
     {
         SuperPellet.onSuperPelletCollected += PlayerCollectedSuperPellet;
+        GameManager.onSuperPelletStop += resetAlreadyEaten;
 
         movement.IsGhost = true;
     }
 
     public void PlayerCollectedSuperPellet() 
     {
-        _isScared = true;
         animator.runtimeAnimatorController = ScaredController;
         StartCoroutine(ScaredSequence());
     }
@@ -58,7 +61,6 @@ public class Ghost : MonoBehaviour, IGhost
     {
         yield return new WaitForSeconds(10f);
         animator.runtimeAnimatorController = NormalController;
-        _isScared = false;
     }
 
     public virtual void ReachedCenterOfNode(Node node)
@@ -126,7 +128,9 @@ public class Ghost : MonoBehaviour, IGhost
 
     public void ResetGhost()
     {
-
+        movement.CanMove = true;
+        transform.position = StartingNode.transform.position;
+        movement._currentNode = StartingNode.GetComponent<Node>();
     }
 
     private void OnEnable()
@@ -150,8 +154,16 @@ public class Ghost : MonoBehaviour, IGhost
         }
     }
 
+    public void resetAlreadyEaten() => AlreadyEatenDuringInvincibility = false;
+
+    public static event Action onGhostEaten;
     public void PlayerTouched()
     {
-        throw new System.NotImplementedException();
+        onGhostEaten?.Invoke();
+        AlreadyEatenDuringInvincibility = true;
+        ghostNodeState = GhostNodeStateMachineEnum.Respawning;
+        transform.position = ghostNodeCenter.transform.position;
+        movement._currentNode = ghostNodeCenter.GetComponent<Node>();
+        animator.runtimeAnimatorController = NormalController;
     }
 }

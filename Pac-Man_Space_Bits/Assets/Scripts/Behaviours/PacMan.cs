@@ -6,7 +6,7 @@ using UnityEngine;
 public class PacMan : MonoBehaviour
 {
     [SerializeField] LayerMask _whatIsPellet;
-    [SerializeField] Node StartNode; 
+    [SerializeField] Node StartNode;
 
     [SerializeField] Movement movement;
 
@@ -75,7 +75,7 @@ public class PacMan : MonoBehaviour
 
     public static event Action onPlayerDeath;
 
-    public void DiePacMan() 
+    public void DiePacMan()
     {
         movement._currentMovement = Vector2.zero;
         movement._nextMovement = Vector2.zero;
@@ -84,7 +84,7 @@ public class PacMan : MonoBehaviour
         movement._currentNode = null;
     }
 
-    public void ResetPacMan() 
+    public void ResetPacMan()
     {
         Animator.SetTrigger("Reset");
         audioSource.Stop();
@@ -93,7 +93,7 @@ public class PacMan : MonoBehaviour
     }
 
     [ContextMenu("Die")]
-    public void DeathTrigger() 
+    public void DeathTrigger()
     {
         Animator.SetTrigger("Death");
         audioSource.Stop();
@@ -111,7 +111,16 @@ public class PacMan : MonoBehaviour
             if (!isPlayerInvincible)
                 DeathTrigger();
             else
-                collision.GetComponent<IGhost>().PlayerTouched();
+            {
+                if (collision.GetComponent<Ghost>().AlreadyEatenDuringInvincibility)
+                {
+                    DeathTrigger();
+                }
+                else
+                {
+                    collision.GetComponent<IGhost>().PlayerTouched();
+                }
+            }
         }
     }
 }

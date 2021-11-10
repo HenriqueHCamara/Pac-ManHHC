@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,11 +44,13 @@ public class GameManager : MonoBehaviour
         Invoke("StopSuperPelletTime", 10f);
     }
 
+    public static event Action onSuperPelletStop;
     void StopSuperPelletTime() 
     {
         audioSource.Stop();
         audioSource.loop = false;
         PacMan.GetComponent<PacMan>().isPlayerInvincible = false;
+        onSuperPelletStop?.Invoke();
     }
 
     void ProcessDeath()

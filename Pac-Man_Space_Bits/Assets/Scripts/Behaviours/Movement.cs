@@ -5,7 +5,7 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     [SerializeField] float _speed = 10f;
-    [SerializeField] float _speedMultiplier = 1f;
+    [SerializeField] public float _speedMultiplier = 1f;
 
     public Vector2 _currentMovement;
     public Vector2 _nextMovement;
@@ -58,7 +58,6 @@ public class Movement : MonoBehaviour
             else
             {
                 _currentMovement = Vector2.zero;
-
             }
 
         }
