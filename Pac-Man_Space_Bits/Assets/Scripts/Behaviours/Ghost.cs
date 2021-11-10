@@ -144,6 +144,7 @@ public class Ghost : MonoBehaviour, IGhost
 
     public void ResetGhost()
     {
+        animator.runtimeAnimatorController = NormalController;
         movement.CanMove = true;
         transform.position = StartingNode.transform.position;
         movement._currentNode = StartingNode.GetComponent<Node>();

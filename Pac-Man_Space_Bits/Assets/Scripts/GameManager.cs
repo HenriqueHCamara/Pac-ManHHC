@@ -131,6 +131,7 @@ public class GameManager : MonoBehaviour
             if (!_isCourotineActive_SuperPellet)
             {
                 GameTimer += Time.deltaTime;
+                print(GameTimer);
             }
         }
     }
@@ -144,6 +145,12 @@ public class GameManager : MonoBehaviour
         else
         {
             StopCoroutine(PelletTime);
+            _audioSource.Stop();
+            _audioSource.loop = false;
+            _pacMan.GetComponent<PacMan>().isPlayerInvincible = false;
+            onSuperPelletStop?.Invoke();
+            _isCourotineActive_SuperPellet = false;
+            _ghostsEatenInSuccession = 0;
             PelletTime = StartCoroutine(SuperPelletCoroutine());
         }
 
@@ -197,6 +204,14 @@ public class GameManager : MonoBehaviour
 
     void ProcessDeath()
     {
+        StopCoroutine(PelletTime);
+        _audioSource.Stop();
+        _audioSource.loop = false;
+        _pacMan.GetComponent<PacMan>().isPlayerInvincible = false;
+        onSuperPelletStop?.Invoke();
+        _isCourotineActive_SuperPellet = false;
+        _ghostsEatenInSuccession = 0;
+
         _pacMan.GetComponent<PacMan>().DiePacMan();
 
         foreach (var item in _ghostSet.Items)
@@ -204,6 +219,7 @@ public class GameManager : MonoBehaviour
             item.GetComponent<Movement>().CanMove = false;
         }
 
+        _audioSource.Stop();
         _audioSource.clip = _deathClip;
         StartCoroutine(ProccessDeathcorotine());
     }
@@ -240,6 +256,7 @@ public class GameManager : MonoBehaviour
         foreach (var item in _ghostSet.Items)
         {
             item.GetComponent<Ghost>().ResetGhost();
+
         }
     }
 
