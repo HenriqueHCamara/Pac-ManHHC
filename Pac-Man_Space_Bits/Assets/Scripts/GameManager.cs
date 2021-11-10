@@ -273,10 +273,16 @@ public class GameManager : MonoBehaviour
         if (_ghostsEatenInSuccession <= 4)
             _ghostsEatenInSuccession++;
 
-        if (_ghostsEatenInSuccession == 0)
+        if (_ghostsEatenInSuccession <= 0)
             RaiseScore(200);
-        else
-            RaiseScore(200 ^ _ghostsEatenInSuccession);
+        else if (_ghostsEatenInSuccession == 1)
+            RaiseScore(200);
+        else if (_ghostsEatenInSuccession == 2)
+            RaiseScore(400);
+        else if (_ghostsEatenInSuccession == 3)
+            RaiseScore(800);
+        else if (_ghostsEatenInSuccession == 4)
+            RaiseScore(1600);
     }
 
     void RaiseScore(int score)
