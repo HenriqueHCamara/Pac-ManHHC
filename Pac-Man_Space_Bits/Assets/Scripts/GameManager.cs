@@ -143,14 +143,17 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            StopCoroutine(PelletTime);
-            _audioSource.Stop();
-            _audioSource.loop = false;
-            _pacMan.GetComponent<PacMan>().isPlayerInvincible = false;
-            onSuperPelletStop?.Invoke();
-            _isCourotineActive_SuperPellet = false;
-            _ghostsEatenInSuccession = 0;
-            PelletTime = StartCoroutine(SuperPelletCoroutine());
+            if (PelletTime != null)
+            {
+                StopCoroutine(PelletTime);
+                _audioSource.Stop();
+                _audioSource.loop = false;
+                _pacMan.GetComponent<PacMan>().isPlayerInvincible = false;
+                onSuperPelletStop?.Invoke();
+                _isCourotineActive_SuperPellet = false;
+                _ghostsEatenInSuccession = 0;
+                PelletTime = StartCoroutine(SuperPelletCoroutine());
+            }
         }
 
     }
@@ -203,13 +206,16 @@ public class GameManager : MonoBehaviour
 
     void ProcessDeath()
     {
-        StopCoroutine(PelletTime);
-        _audioSource.Stop();
-        _audioSource.loop = false;
-        _pacMan.GetComponent<PacMan>().isPlayerInvincible = false;
-        onSuperPelletStop?.Invoke();
-        _isCourotineActive_SuperPellet = false;
-        _ghostsEatenInSuccession = 0;
+        if (PelletTime != null)
+        {
+            StopCoroutine(PelletTime);
+            _audioSource.Stop();
+            _audioSource.loop = false;
+            _pacMan.GetComponent<PacMan>().isPlayerInvincible = false;
+            onSuperPelletStop?.Invoke();
+            _isCourotineActive_SuperPellet = false;
+            _ghostsEatenInSuccession = 0;
+        }
 
         _pacMan.GetComponent<PacMan>().DiePacMan();
 
