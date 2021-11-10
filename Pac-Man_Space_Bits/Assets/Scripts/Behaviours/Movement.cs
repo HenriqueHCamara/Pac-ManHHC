@@ -32,7 +32,7 @@ public class Movement : MonoBehaviour
     {
         if (_currentNode && CanMove)
         {
-            transform.position = Vector2.MoveTowards(transform.position, _currentNode.transform.position, _speed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, _currentNode.transform.position, (_speedMultiplier * _speed) * Time.deltaTime);
             if (IsOnNode())
                 MoveToNextNode();
         }

@@ -17,8 +17,10 @@ public class Blinky : Ghost
     void DetermineDirection()
     {
         Vector2 direction = Vector2.zero;
+        movement._speedMultiplier = 1f;
         if (pacman.isPlayerInvincible && !AlreadyEatenDuringInvincibility)
         {
+            movement._speedMultiplier = 0.7f;
             direction = GetClosestDirectionToTarget(ghostTargetNode.transform.position);
         }
         else

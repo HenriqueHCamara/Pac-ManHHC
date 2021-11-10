@@ -73,6 +73,7 @@ public class Ghost : MonoBehaviour, IGhost
     IEnumerator ScaredSequence()
     {
         isPelletTimeRunning = true;
+        
         yield return new WaitForSeconds(10f);
         animator.runtimeAnimatorController = NormalController;
         isPelletTimeRunning = false;
