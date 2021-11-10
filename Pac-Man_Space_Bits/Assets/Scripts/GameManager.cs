@@ -71,24 +71,25 @@ public class GameManager : MonoBehaviour
     public static event Action onSuperPelletStop;
     IEnumerator SuperPelletCoroutine()
     {
-
         isCourotineActive_SuperPellet = true;
         audioSource.Stop();
         audioSource.clip = SuperPillClip;
-        audioSource.Play();
-        audioSource.loop = true;
+        audioSource.loop = false;
         PacMan.GetComponent<PacMan>().isPlayerInvincible = true;
-        yield return new WaitUntil(() => audioSource.isPlaying == false);
+        for (int i = 0; i < 3; i++)
+        {
+            audioSource.Play();
+            yield return new WaitUntil(() => audioSource.isPlaying == false);
+        }
         audioSource.Stop();
         audioSource.loop = false;
         PacMan.GetComponent<PacMan>().isPlayerInvincible = false;
         onSuperPelletStop?.Invoke();
         isCourotineActive_SuperPellet = false;
         yield return null;
-
     }
 
-    IEnumerator BeginGame() 
+    IEnumerator BeginGame()
     {
         PacMan.GetComponent<Movement>().CanMove = false;
 

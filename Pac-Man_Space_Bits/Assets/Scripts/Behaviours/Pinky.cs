@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Pinky : Ghost, IGhost
 {
+    Vector2 target;
+
     private void Awake()
     {
         ghostNodeState = GhostNodeStateMachineEnum.StartNode;
@@ -21,7 +23,25 @@ public class Pinky : Ghost, IGhost
         }
         else
         {
-            direction = GetClosestDirectionToTarget(pacman.transform.position);
+            Vector2 pacmanDirection = pacman.GetComponent<Movement>()._currentMovement;
+            float NodeDistance = 2f;
+
+            target = pacman.transform.position;
+
+            if (pacmanDirection == Vector2.right)
+                target.x += NodeDistance * 2;
+
+            else if (pacmanDirection == Vector2.left)
+                target.x -= NodeDistance * 2;
+
+            else if (pacmanDirection == Vector2.up)
+                target.y += NodeDistance * 2;
+
+            else if (pacmanDirection == Vector2.down)
+                target.y -= NodeDistance * 2;
+
+
+            direction = GetClosestDirectionToTarget(target);
         }
         movement._lastMovement = direction;
         movement.SetNextDirection(direction);
@@ -79,5 +99,12 @@ public class Pinky : Ghost, IGhost
                 }
             }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.magenta;
+
+        Gizmos.DrawSphere(target, .3f);
     }
 }

@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class Inky : Ghost, IGhost
 {
+    Vector2 newTarget;
+
+    public GameObject Blinky;
+
     private void Awake()
     {
         ghostNodeState = GhostNodeStateMachineEnum.CenterNode;
-        
+
 
         movement._currentNode = StartingNode.GetComponent<Node>();
         transform.position = StartingNode.transform.position;
@@ -22,7 +26,30 @@ public class Inky : Ghost, IGhost
         }
         else
         {
-            direction = GetClosestDirectionToTarget(pacman.transform.position);
+            Vector2 pacmanDirection = pacman.GetComponent<Movement>()._currentMovement;
+            float NodeDistance = 2f;
+
+            Vector2 target = pacman.transform.position;
+
+            if (pacmanDirection == Vector2.right)
+                target.x += NodeDistance * 2;
+
+            else if (pacmanDirection == Vector2.left)
+                target.x -= NodeDistance * 2;
+
+            else if (pacmanDirection == Vector2.up)
+                target.y += NodeDistance * 2;
+
+            else if (pacmanDirection == Vector2.down)
+                target.y -= NodeDistance * 2;
+
+
+            float xDistance = target.x - Blinky.transform.position.x;
+            float yDistance = target.y - Blinky.transform.position.y;
+
+            newTarget = new Vector2(target.x + xDistance, target.y + yDistance);
+
+            direction = GetClosestDirectionToTarget(newTarget);
         }
         movement._lastMovement = direction;
         movement.SetNextDirection(direction);
@@ -80,5 +107,12 @@ public class Inky : Ghost, IGhost
                 }
             }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+
+        Gizmos.DrawSphere(newTarget, .3f);
     }
 }

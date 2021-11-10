@@ -17085,6 +17085,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1831697004}
     - target: {fileID: -2661652656420067348, guid: db5171dba05aee94299f0a2bcbfd66b7, type: 3}
+      propertyPath: CanLeaveHome
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2661652656420067348, guid: db5171dba05aee94299f0a2bcbfd66b7, type: 3}
       propertyPath: StartingNode
       value: 
       objectReference: {fileID: 1479047209}
@@ -24185,9 +24189,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -4355399024625125080, guid: 7105096314f1c3f44bef70c864f634ca, type: 3}
+      propertyPath: Blinky
+      value: 
+      objectReference: {fileID: 1710695047}
+    - target: {fileID: -4355399024625125080, guid: 7105096314f1c3f44bef70c864f634ca, type: 3}
       propertyPath: pacman
       value: 
       objectReference: {fileID: 1831697004}
+    - target: {fileID: -4355399024625125080, guid: 7105096314f1c3f44bef70c864f634ca, type: 3}
+      propertyPath: CanLeaveHome
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -4355399024625125080, guid: 7105096314f1c3f44bef70c864f634ca, type: 3}
       propertyPath: StartingNode
       value: 
@@ -30720,6 +30732,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 620503274595415811, guid: ea3860884878b5041954d3fd942cfec3, type: 3}
   m_PrefabInstance: {fileID: 1707482221}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1710695047 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1271597146130597458, guid: 4bd1f5bc524b2ac47adbf6ee0a820eed, type: 3}
+  m_PrefabInstance: {fileID: 744220236}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1711931078
 PrefabInstance:
