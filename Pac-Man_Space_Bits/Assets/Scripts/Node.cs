@@ -15,6 +15,10 @@ public class Node : MonoBehaviour
     public GameObject NodeLeft;
     public GameObject NodeRight;
 
+    public bool isWarpRightNode = false;
+    public bool isWarpLeftNode = false;
+    public bool isWarpingNode = false;
+
     [SerializeField] LayerMask _whatIsNode;
 
     private void Start()

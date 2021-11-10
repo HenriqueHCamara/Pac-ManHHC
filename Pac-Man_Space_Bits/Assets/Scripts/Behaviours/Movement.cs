@@ -7,14 +7,17 @@ public class Movement : MonoBehaviour
     [SerializeField] float _speed = 10f;
     [SerializeField] public float _speedMultiplier = 1f;
 
+
     public Vector2 _currentMovement;
     public Vector2 _nextMovement;
     public Vector2 _lastMovement;
 
     Animator animator;
     BoxCollider2D boxCollider2D;
+    WarpNodesManager _wManager;
 
     public bool CanMove = true;
+    public bool CanWarp = true;
     public bool IsGhost = false;
 
     public Node _currentNode;
@@ -26,6 +29,8 @@ public class Movement : MonoBehaviour
             animator = GetComponent<Animator>();
         if (!boxCollider2D)
             boxCollider2D = GetComponent<BoxCollider2D>();
+        if (!_wManager)
+            _wManager = FindObjectOfType<WarpNodesManager>();
     }
 
     private void Update()
@@ -34,32 +39,57 @@ public class Movement : MonoBehaviour
         {
             transform.position = Vector2.MoveTowards(transform.position, _currentNode.transform.position, (_speedMultiplier * _speed) * Time.deltaTime);
             if (IsOnNode())
+            {
                 MoveToNextNode();
+            }
+            else
+            {
+                CanWarp = true;
+            }
         }
     }
 
     private void MoveToNextNode()
     {
-        Node newNode = _currentNode.GetAvaiableNodeFromDirection(_nextMovement);
-
-        if (newNode)
+        if (_currentNode.isWarpLeftNode && CanWarp)
         {
-            _lastNode = _currentNode;
-            _currentNode = newNode;
-            _currentMovement = _nextMovement;
+            CanWarp = false;
+            _currentNode = _wManager.WarpNodeRight;
+            _currentMovement = Vector2.left;
+            _lastMovement = Vector2.left;
+            transform.position = _currentNode.transform.position;
+        }
+        else if (_currentNode.isWarpRightNode && CanWarp)
+        {
+            CanWarp = false;
+            _currentNode = _wManager.WarpNodeLeft;
+            _currentMovement = Vector2.right;
+            _lastMovement = Vector2.right;
+            transform.position = _currentNode.transform.position;
         }
         else
         {
-            newNode = _currentNode.GetAvaiableNodeFromDirection(_currentMovement);
+
+            Node newNode = _currentNode.GetAvaiableNodeFromDirection(_nextMovement);
+
             if (newNode)
             {
+                _lastNode = _currentNode;
                 _currentNode = newNode;
+                _currentMovement = _nextMovement;
             }
             else
             {
-                _currentMovement = Vector2.zero;
+                newNode = _currentNode.GetAvaiableNodeFromDirection(_currentMovement);
+                if (newNode)
+                {
+                    _currentNode = newNode;
+                }
+                else
+                {
+                    _currentMovement = Vector2.zero;
+                }
             }
-
         }
     }
 
@@ -73,21 +103,28 @@ public class Movement : MonoBehaviour
                 if (this.GetComponent<Blinky>())
                 {
                     GetComponent<Blinky>().ReachedCenterOfNode(_currentNode);
+
                 }
                 else if (GetComponent<Pinky>())
                 {
                     GetComponent<Pinky>().ReachedCenterOfNode(_currentNode);
-
                 }
                 else if (GetComponent<Clyde>())
                 {
-
                     GetComponent<Clyde>().ReachedCenterOfNode(_currentNode);
                 }
                 else
                 {
-
                     GetComponent<Inky>().ReachedCenterOfNode(_currentNode);
+                }
+
+                if (_currentNode.isWarpingNode)
+                {
+                    _speedMultiplier = .6f;
+                }
+                else
+                {
+                    _speedMultiplier = 1f;
                 }
                 //GetComponent<Ghost>().ReachedCenterOfNode(_currentNode);
             }

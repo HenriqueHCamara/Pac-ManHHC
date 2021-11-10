@@ -6,26 +6,29 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] PelletsSet _pelletsSet;
-    [SerializeField] PelletsSet _superPelletsSet;
-    [SerializeField] SceneController _sceneController;
-
+    [Header("UI")]
     [SerializeField] Text _currentScoreText;
     [SerializeField] Text _maxScoreText;
     [SerializeField] GameObject _gameOverText;
     [SerializeField] Text _livesHeader;
     [SerializeField] GameObject[] _LivesImages;
 
+    [Header("Data")]
     [SerializeField] GameData _gameData;
     [SerializeField] PacMan _pacMan;
     [SerializeField] GhostsSet _ghostSet;
+    [SerializeField] PelletsSet _pelletsSet;
+    [SerializeField] PelletsSet _superPelletsSet;
+    [SerializeField] SceneController _sceneController;
 
+    [Header("Audio")]
     [SerializeField] AudioSource _audioSource;
     [SerializeField] AudioSource _SFXSource;
     [SerializeField] AudioClip _deathClip;
     [SerializeField] AudioClip _superPillClip;
     [SerializeField] AudioClip _gameBeginClip;
     [SerializeField] AudioClip _extraLifeClip;
+
 
     bool _isCourotineActive_SuperPellet;
     bool _isGameBeggining;

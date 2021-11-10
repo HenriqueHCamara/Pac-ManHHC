@@ -8,6 +8,7 @@ TagManager:
   - Ghost
   - Node
   - GhostNode
+  - WarpNode
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - Interactible
   - Node
   - GhostNode
-  - 
+  - WarpNode
   - 
   - 
   - 
