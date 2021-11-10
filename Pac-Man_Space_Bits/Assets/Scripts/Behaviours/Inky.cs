@@ -7,7 +7,7 @@ public class Inky : Ghost, IGhost
     private void Awake()
     {
         ghostNodeState = GhostNodeStateMachineEnum.CenterNode;
-        StartingNode = ghostNodeStart;
+        
 
         movement._currentNode = StartingNode.GetComponent<Node>();
         transform.position = StartingNode.transform.position;

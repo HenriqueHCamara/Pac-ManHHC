@@ -70,7 +70,25 @@ public class Movement : MonoBehaviour
         {
             if (IsGhost)
             {
-                GetComponent<Blinky>().ReachedCenterOfNode(_currentNode);
+                if (this.GetComponent<Blinky>())
+                {
+                    GetComponent<Blinky>().ReachedCenterOfNode(_currentNode);
+                }
+                else if (GetComponent<Pinky>())
+                {
+                    GetComponent<Pinky>().ReachedCenterOfNode(_currentNode);
+
+                }
+                else if (GetComponent<Clyde>())
+                {
+
+                    GetComponent<Clyde>().ReachedCenterOfNode(_currentNode);
+                }
+                else
+                {
+
+                    GetComponent<Inky>().ReachedCenterOfNode(_currentNode);
+                }
                 //GetComponent<Ghost>().ReachedCenterOfNode(_currentNode);
             }
             return true;

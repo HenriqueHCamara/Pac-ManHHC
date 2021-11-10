@@ -145,6 +145,11 @@ public class GameManager : MonoBehaviour
 
     void EndGame()
     {
+        if (gameData.CurrentLives > 0)
+        {
+            gameData.CurrentScore *= gameData.CurrentLives;
+        }
+
         _maxScoreText.text = gameData.MaxScore.ToString();
         _gameOverText.SetActive(true);
         gameData.EndGameData();
