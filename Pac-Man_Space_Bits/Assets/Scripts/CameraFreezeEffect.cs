@@ -22,7 +22,7 @@ public class CameraFreezeEffect : MonoBehaviour
     IEnumerator freezeFrame() 
     {
         Time.timeScale = 0f;
-        yield return new WaitForSecondsRealtime(.15f);
+        yield return new WaitForSecondsRealtime(.3f);
         Time.timeScale = 1f;
     }
 

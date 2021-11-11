@@ -25485,6 +25485,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 435458911}
     - target: {fileID: -4355399024625125080, guid: 7105096314f1c3f44bef70c864f634ca, type: 3}
+      propertyPath: ghostAudioSource
+      value: 
+      objectReference: {fileID: 1361759703}
+    - target: {fileID: -4355399024625125080, guid: 7105096314f1c3f44bef70c864f634ca, type: 3}
       propertyPath: ghostRespawnState
       value: 3
       objectReference: {fileID: 0}
@@ -25542,6 +25546,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7105096314f1c3f44bef70c864f634ca, type: 3}
+--- !u!82 &1361759703 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 4055578788512433363, guid: 7105096314f1c3f44bef70c864f634ca, type: 3}
+  m_PrefabInstance: {fileID: 1361759702}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1363051462
 PrefabInstance:
   m_ObjectHideFlags: 0

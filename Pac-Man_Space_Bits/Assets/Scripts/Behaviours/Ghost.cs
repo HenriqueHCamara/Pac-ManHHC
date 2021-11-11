@@ -18,6 +18,7 @@ public class Ghost : MonoBehaviour, IGhost
     [SerializeField] public Animator animator;
     [SerializeField] public RuntimeAnimatorController NormalController;
     [SerializeField] public RuntimeAnimatorController ScaredController;
+    [SerializeField] AudioSource ghostAudioSource;
 
     [SerializeField] public GameObject ghostNodeStart;
     [SerializeField] public GameObject ghostNodeCenter;
@@ -179,6 +180,7 @@ public class Ghost : MonoBehaviour, IGhost
     public static event Action<int> onGhostEaten;
     public void PlayerTouched()
     {
+        ghostAudioSource.Play();
         onGhostEaten?.Invoke(200);
         AlreadyEatenDuringInvincibility = true;
         ghostNodeState = GhostNodeStateMachineEnum.Respawning;
