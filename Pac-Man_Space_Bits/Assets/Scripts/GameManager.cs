@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -12,6 +13,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _gameOverText;
     [SerializeField] Text _livesHeader;
     [SerializeField] GameObject[] _LivesImages;
+    [SerializeField] GameObject PauseScreen;
+    [SerializeField] EventSystem _eventSystem;
 
     [Header("Data")]
     [SerializeField] GameData _gameData;
@@ -45,12 +48,16 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1f;
+
         Pellet.onPelletCollected += RaiseScore;
         SuperPellet.onSuperPelletCollected += SuperPelletTime;
         SuperPellet.onSuperPelletDone += RaiseScore;
 
         Ghost.onGhostEaten += GhostScoreSequence;
         PacMan.onPlayerDeath += ProcessDeath;
+
+        PlayerInputHandler.onPauseInputEvent += PauseGame;
 
         _livesHeader.text = "LIVES 1UP";
 
@@ -68,7 +75,7 @@ public class GameManager : MonoBehaviour
         }
 
         StartCoroutine(BeginGame());
-        
+
     }
 
     private void OnDisable()
@@ -79,6 +86,25 @@ public class GameManager : MonoBehaviour
 
         Ghost.onGhostEaten -= GhostScoreSequence;
         PacMan.onPlayerDeath -= ProcessDeath;
+        PlayerInputHandler.onPauseInputEvent -= PauseGame;
+    }
+
+    void PauseGame()
+    {
+        if (_isGameBeggining) return;
+
+        _audioSource.Pause();
+        _behaviourAudioSource.Pause();
+        PauseScreen.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void UnpauseGame()
+    {
+        Time.timeScale = 1;
+        _behaviourAudioSource.Play();
+        _audioSource.Play();
+        PauseScreen.SetActive(false);
     }
 
     IEnumerator ProcessGameTimer()
@@ -195,13 +221,11 @@ public class GameManager : MonoBehaviour
         _isCourotineActive_SuperPellet = true;
         _audioSource.Stop();
         _audioSource.clip = _superPillClip;
-        _audioSource.loop = false;
+        _audioSource.loop = true;
         _pacMan.GetComponent<PacMan>().isPlayerInvincible = true;
-        for (int i = 0; i < 3; i++)
-        {
-            _audioSource.Play();
-            yield return new WaitUntil(() => _audioSource.isPlaying == false);
-        }
+        _audioSource.Play();
+
+        yield return new WaitForSeconds(10f);
         _audioSource.Stop();
         _audioSource.loop = false;
         _pacMan.GetComponent<PacMan>().isPlayerInvincible = false;
@@ -233,6 +257,7 @@ public class GameManager : MonoBehaviour
         }
 
         _pacMan.GetComponent<Movement>().CanMove = true;
+        _audioSource.clip = null;
         _isGameBeggining = false;
         StartCoroutine(ProcessGameTimer());
     }

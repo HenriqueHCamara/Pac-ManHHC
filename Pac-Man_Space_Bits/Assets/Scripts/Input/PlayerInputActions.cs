@@ -25,6 +25,14 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""3ac59ba0-0680-485e-8fbf-16ad2d99f5d7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -137,6 +145,28 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""783ec902-4403-4715-a673-12d959ef745a"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""83253676-b198-49c4-83aa-97c901a41682"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -146,6 +176,7 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_Movement = m_Movement.FindAction("Movement", throwIfNotFound: true);
+        m_Movement_Pause = m_Movement.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -196,11 +227,13 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Movement;
     private IMovementActions m_MovementActionsCallbackInterface;
     private readonly InputAction m_Movement_Movement;
+    private readonly InputAction m_Movement_Pause;
     public struct MovementActions
     {
         private @PlayerInputActions m_Wrapper;
         public MovementActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Movement_Movement;
+        public InputAction @Pause => m_Wrapper.m_Movement_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -213,6 +246,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Movement.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnMovement;
+                @Pause.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_MovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -220,6 +256,9 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -227,5 +266,6 @@ public class @PlayerInputActions : IInputActionCollection, IDisposable
     public interface IMovementActions
     {
         void OnMovement(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

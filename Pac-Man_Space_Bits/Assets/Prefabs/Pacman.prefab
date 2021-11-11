@@ -126,7 +126,10 @@ MonoBehaviour:
   _speedMultiplier: 1
   _currentMovement: {x: 0, y: 0}
   _nextMovement: {x: 0, y: 0}
+  _lastMovement: {x: 0, y: 0}
   CanMove: 1
+  CanWarp: 1
+  IsGhost: 0
   _currentNode: {fileID: 0}
 --- !u!114 &7917721501571644718
 MonoBehaviour:
@@ -181,6 +184,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 44a5b50c-abbb-4bc4-a828-af1edd8dc01e
     m_ActionName: Movement/Movement[/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7917721501571644718}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: onPauseInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 3ac59ba0-0680-485e-8fbf-16ad2d99f5d7
+    m_ActionName: Movement/Pause[/Keyboard/escape,/DualShock4GamepadHID/start,/XInputControllerWindows/start]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Movement
@@ -240,7 +259,7 @@ AudioSource:
   m_GameObject: {fileID: 7917721501571644714}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: e6dedbfc2776d7c459ec7c631d5613ed, type: 2}
   m_audioClip: {fileID: 8300000, guid: 51d63156320e78c4bbb8952cb4c901e4, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1

@@ -43,4 +43,14 @@ public class PlayerInputHandler : MonoBehaviour
                 onMovementInput?.Invoke(Vector2.right);
         }
     }
+
+    public static event Action onPauseInputEvent;
+
+    public void onPauseInput(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            onPauseInputEvent?.Invoke();
+        }
+    }
 }
