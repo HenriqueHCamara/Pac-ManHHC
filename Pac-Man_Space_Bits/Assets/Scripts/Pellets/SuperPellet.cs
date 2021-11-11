@@ -13,7 +13,7 @@ public class SuperPellet : Pellet
         spriteRenderer.enabled = false;
         audioSource.Play();
         yield return new WaitForSeconds(audioSource.clip.length);
-        onSuperPelletDone?.Invoke(50);
         this.gameObject.SetActive(false);
+        onSuperPelletDone?.Invoke(50);
     }
 }
