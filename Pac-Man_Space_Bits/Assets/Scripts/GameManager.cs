@@ -366,8 +366,11 @@ public class GameManager : MonoBehaviour
             item.GetComponent<Movement>().CanMove = false;
         }
 
-        _audioSource.Stop();
         _behaviourAudioSource.Stop();
+
+        StopCoroutine(PelletTime);
+        _audioSource.Stop();
+        _audioSource.loop = false;
 
         _pacMan.GetComponent<Movement>().CanMove = false;
         _pacMan.audioSource.Stop();
