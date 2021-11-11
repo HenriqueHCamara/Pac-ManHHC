@@ -23,12 +23,14 @@ public class GameManager : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] AudioSource _audioSource;
+    [SerializeField] AudioSource _behaviourAudioSource;
     [SerializeField] AudioSource _SFXSource;
     [SerializeField] AudioClip _deathClip;
     [SerializeField] AudioClip _superPillClip;
     [SerializeField] AudioClip _gameBeginClip;
     [SerializeField] AudioClip _extraLifeClip;
-
+    [SerializeField] AudioClip _scatterClip;
+    [SerializeField] AudioClip _chaseClip;
 
     bool _isCourotineActive_SuperPellet;
     bool _isGameBeggining;
@@ -66,7 +68,7 @@ public class GameManager : MonoBehaviour
         }
 
         StartCoroutine(BeginGame());
-        StartCoroutine(ProcessGameTimer());
+        
     }
 
     private void OnDisable()
@@ -81,6 +83,9 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ProcessGameTimer()
     {
+        _behaviourAudioSource.Stop();
+        _behaviourAudioSource.clip = _scatterClip;
+        _behaviourAudioSource.Play();
         yield return new WaitUntil(() => GameTimer > 7);
         foreach (var item in _ghostSet.Items)
         {
@@ -88,6 +93,9 @@ public class GameManager : MonoBehaviour
                 item.CanLeaveHome = true;
 
             item.IsChaseMode = true;
+            _behaviourAudioSource.Stop();
+            _behaviourAudioSource.clip = _chaseClip;
+            _behaviourAudioSource.Play();
         }
         yield return new WaitUntil(() => GameTimer > 12);
         foreach (var item in _ghostSet.Items)
@@ -99,31 +107,49 @@ public class GameManager : MonoBehaviour
         foreach (var item in _ghostSet.Items)
         {
             item.IsChaseMode = false;
+            _behaviourAudioSource.Stop();
+            _behaviourAudioSource.clip = _scatterClip;
+            _behaviourAudioSource.Play();
         }
         yield return new WaitUntil(() => GameTimer > 27);
         foreach (var item in _ghostSet.Items)
         {
             item.IsChaseMode = true;
+            _behaviourAudioSource.Stop();
+            _behaviourAudioSource.clip = _chaseClip;
+            _behaviourAudioSource.Play();
         }
         yield return new WaitUntil(() => GameTimer > 47);
         foreach (var item in _ghostSet.Items)
         {
             item.IsChaseMode = false;
+            _behaviourAudioSource.Stop();
+            _behaviourAudioSource.clip = _scatterClip;
+            _behaviourAudioSource.Play();
         }
         yield return new WaitUntil(() => GameTimer > 54);
         foreach (var item in _ghostSet.Items)
         {
             item.IsChaseMode = true;
+            _behaviourAudioSource.Stop();
+            _behaviourAudioSource.clip = _chaseClip;
+            _behaviourAudioSource.Play();
         }
         yield return new WaitUntil(() => GameTimer > 61);
         foreach (var item in _ghostSet.Items)
         {
             item.IsChaseMode = false;
+            _behaviourAudioSource.Stop();
+            _behaviourAudioSource.clip = _scatterClip;
+            _behaviourAudioSource.Play();
         }
         yield return new WaitUntil(() => GameTimer > 68);
         foreach (var item in _ghostSet.Items)
         {
             item.IsChaseMode = true;
+            _behaviourAudioSource.Stop();
+            _behaviourAudioSource.clip = _chaseClip;
+            _behaviourAudioSource.Play();
         }
     }
 
@@ -155,6 +181,7 @@ public class GameManager : MonoBehaviour
                 onSuperPelletStop?.Invoke();
                 _isCourotineActive_SuperPellet = false;
                 _ghostsEatenInSuccession = 0;
+                _behaviourAudioSource.Play();
                 PelletTime = StartCoroutine(SuperPelletCoroutine());
             }
         }
@@ -164,6 +191,7 @@ public class GameManager : MonoBehaviour
     public static event Action onSuperPelletStop;
     IEnumerator SuperPelletCoroutine()
     {
+        _behaviourAudioSource.Stop();
         _isCourotineActive_SuperPellet = true;
         _audioSource.Stop();
         _audioSource.clip = _superPillClip;
@@ -180,6 +208,7 @@ public class GameManager : MonoBehaviour
         onSuperPelletStop?.Invoke();
         _isCourotineActive_SuperPellet = false;
         _ghostsEatenInSuccession = 0;
+        _behaviourAudioSource.Play();
         yield return null;
     }
 
@@ -205,6 +234,7 @@ public class GameManager : MonoBehaviour
 
         _pacMan.GetComponent<Movement>().CanMove = true;
         _isGameBeggining = false;
+        StartCoroutine(ProcessGameTimer());
     }
 
     void ProcessDeath()
@@ -218,6 +248,7 @@ public class GameManager : MonoBehaviour
             onSuperPelletStop?.Invoke();
             _isCourotineActive_SuperPellet = false;
             _ghostsEatenInSuccession = 0;
+            _behaviourAudioSource.Play();
         }
 
         _pacMan.GetComponent<PacMan>().DiePacMan();
