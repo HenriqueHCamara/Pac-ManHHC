@@ -347,7 +347,7 @@ public class GameManager : MonoBehaviour
 
         if (!_alreadyGainedExtraLife)
         {
-            if (_gameData.CurrentScore > 10000)
+            if (_gameData.CurrentScore > 1000)
             {
                 _livesHeader.text = "LIVES 0UP";
                 _gameData.CurrentLives++;
@@ -386,6 +386,8 @@ public class GameManager : MonoBehaviour
     [ContextMenu("EndGame")]
     void EndGame()
     {
+        PlayerInputHandler.onPauseInputEvent -= PauseGame;
+
         foreach (var item in _ghostSet.Items)
         {
             item.GetComponent<Movement>().CanMove = false;
@@ -393,7 +395,11 @@ public class GameManager : MonoBehaviour
 
         _behaviourAudioSource.Stop();
 
-        StopCoroutine(PelletTime);
+        if (PelletTime != null)
+        {
+            StopCoroutine(PelletTime);
+        }
+
         _audioSource.Stop();
         _audioSource.loop = false;
 
