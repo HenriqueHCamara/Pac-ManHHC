@@ -358,12 +358,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [ContextMenu("EndGame")]
     void EndGame()
     {
         foreach (var item in _ghostSet.Items)
         {
             item.GetComponent<Movement>().CanMove = false;
         }
+
+        _audioSource.Stop();
+        _behaviourAudioSource.Stop();
 
         _pacMan.GetComponent<Movement>().CanMove = false;
         _pacMan.audioSource.Stop();
